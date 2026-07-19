@@ -55,7 +55,15 @@ const ApplyPage: React.FC = () => {
     setError(null);
 
     if (!formData.agreement) {
+      alert('Anda harus menyetujui pernyataan kebenaran data.');
       setError('Anda harus menyetujui pernyataan kebenaran data.');
+      return;
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    if (formData.death_date && formData.death_date > today) {
+      alert('Tanggal meninggal dunia tidak boleh di masa depan.');
+      setError('Tanggal meninggal dunia tidak boleh di masa depan.');
       return;
     }
 
@@ -272,6 +280,7 @@ const ApplyPage: React.FC = () => {
                 name="death_date" 
                 className="form-control" 
                 required 
+                max={new Date().toISOString().split('T')[0]}
                 value={formData.death_date} 
                 onChange={handleInputChange}
               />
@@ -381,6 +390,7 @@ const ApplyPage: React.FC = () => {
               type="checkbox" 
               id="agreement" 
               name="agreement" 
+              required
               style={{ marginTop: '4px', transform: 'scale(1.2)' }}
               checked={formData.agreement}
               onChange={handleInputChange}
