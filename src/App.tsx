@@ -40,7 +40,6 @@ const Navigation: React.FC = () => {
             <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Beranda</Link>
             <Link to="/apply" className={`nav-link ${location.pathname === '/apply' ? 'active' : ''}`}>Daftar Online</Link>
             <Link to="/track" className={`nav-link ${location.pathname === '/track' ? 'active' : ''}`}>Cek Status</Link>
-            <Link to="/login" className={`nav-link ${location.pathname === '/login' ? 'active' : ''}`}>Admin Portal</Link>
           </div>
         )}
 
