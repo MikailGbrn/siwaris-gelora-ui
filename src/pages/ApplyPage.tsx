@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, Send, CheckCircle2, Loader2, Upload } from 'lucide-react';
+import { ChevronLeft, Send, CheckCircle2, Loader2, Info } from 'lucide-react';
 
 const ApplyPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -17,6 +17,7 @@ const ApplyPage: React.FC = () => {
     heir_name: '',
     death_date: '',
     relationship: '',
+    is_divorced: 'Tidak',
     agreement: false
   });
 
@@ -29,12 +30,13 @@ const ApplyPage: React.FC = () => {
     file_ktp_ahli_waris: null,
     file_kk_ahli_waris: null,
     file_akta_lahir_ahli_waris: null,
-    file_surat_nikah_pewaris: null,
-    file_akta_kematian_pewaris: null,
-    file_akta_cerai_pewaris: null,
-    file_kematian_ahli_waris: null,
     file_ktp_saksi: null,
-    file_pernyataan_lainnya: null
+    file_kematian_ahli_waris_wafat_lebih_dulu: null,
+    file_pendukung_lainnya: null,
+    file_surat_nikah_pewaris: null,
+    file_ktp_suami: null,
+    file_ktp_istri: null,
+    file_akta_cerai_pewaris: null
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -76,19 +78,36 @@ const ApplyPage: React.FC = () => {
       return;
     }
 
-    const requiredKeys = [
+    // 1. Validate Global Mandatory Files
+    const globalMandatoryKeys = [
       'file_permohonan', 'file_pengantar_rt_rw', 'file_pernyataan_kebenaran', 'file_sptjm',
       'file_ktp_pewaris', 'file_ktp_ahli_waris', 'file_kk_ahli_waris', 'file_akta_lahir_ahli_waris',
-      'file_surat_nikah_pewaris', 'file_akta_kematian_pewaris', 'file_akta_cerai_pewaris',
-      'file_kematian_ahli_waris', 'file_ktp_saksi', 'file_pernyataan_lainnya'
+      'file_ktp_saksi'
     ];
-
-    const missing = requiredKeys.filter(k => !files[k]);
-    if (missing.length > 0) {
-      const msg = 'Semua 14 berkas persyaratan wajib diunggah.';
+    const missingGlobal = globalMandatoryKeys.filter(k => !files[k]);
+    if (missingGlobal.length > 0) {
+      const msg = 'Silakan unggah semua dokumen wajib yang diperlukan.';
       alert(msg);
       setError(msg);
       return;
+    }
+
+    // 2. Validate Relationship Conditional Files
+    const hasRelDocs = formData.relationship === 'Orang Tua' || formData.relationship === 'Istri / Suami';
+    if (hasRelDocs) {
+      if (!files.file_surat_nikah_pewaris || !files.file_ktp_suami || !files.file_ktp_istri) {
+        const msg = 'Dokumen hubungan pernikahan (Surat Nikah, KTP Suami & KTP Istri) wajib diunggah untuk hubungan Orang Tua atau Istri/Suami.';
+        alert(msg);
+        setError(msg);
+        return;
+      }
+
+      if (formData.is_divorced === 'Ya' && !files.file_akta_cerai_pewaris) {
+        const msg = 'Dokumen Akta Cerai wajib diunggah karena status pernikahan bercerai.';
+        alert(msg);
+        setError(msg);
+        return;
+      }
     }
 
     setLoading(true);
@@ -124,6 +143,8 @@ const ApplyPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const showRelationshipDocs = formData.relationship === 'Orang Tua' || formData.relationship === 'Istri / Suami';
 
   if (successData) {
     return (
@@ -324,218 +345,275 @@ const ApplyPage: React.FC = () => {
             </div>
           </div>
 
+          {showRelationshipDocs && (
+            <div className="form-group" style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginTop: '10px' }}>
+              <label htmlFor="is_divorced" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>Apakah Pewaris Bercerai?</label>
+              <select
+                id="is_divorced"
+                name="is_divorced"
+                className="form-control"
+                value={formData.is_divorced}
+                onChange={handleInputChange}
+              >
+                <option value="Tidak">Tidak Bercerai</option>
+                <option value="Ya">Bercerai (Cerai Hidup/Mati)</option>
+              </select>
+              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginTop: '6px' }}>
+                * Jika bercerai, Anda wajib mengunggah Akta Cerai pada kolom unggah dokumen di bawah.
+              </span>
+            </div>
+          )}
+
           {/* Bagian 3: Upload Berkas */}
           <h3 style={{ borderBottom: '2px solid var(--primary-light)', paddingBottom: '8px', color: 'var(--primary)', marginBottom: '20px', marginTop: '40px' }}>
-            III. UNGGAH DOKUMEN PERSYARATAN (Maksimal 5MB, Format PDF/Gambar - Wajib Semua)
+            III. UNGGAH DOKUMEN PERSYARATAN (Maksimal 5MB, Format PDF/Gambar)
           </h3>
 
-          <div className="form-group">
-            <label>1. Permohonan oleh Para Ahli Waris / Kuasa Waris *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_permohonan')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_permohonan ? files.file_permohonan.name : "Pilih berkas Surat Permohonan / Kuasa"}
-              </span>
+          {/* Sub-bagian A: Dokumen Wajib Global */}
+          <div style={{ marginBottom: '20px' }}>
+            <h4 style={{ color: 'var(--secondary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              A. DOKUMEN WAJIB UTAMA (Semua Pemohon)
+            </h4>
+            
+            <div className="form-group">
+              <label>1. Permohonan Ahli Waris / Kuasa Waris *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_permohonan')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_permohonan ? files.file_permohonan.name : "Pilih berkas Surat Permohonan / Surat Kuasa"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>2. Surat Pengantar RT/RW *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_pengantar_rt_rw')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_pengantar_rt_rw ? files.file_pengantar_rt_rw.name : "Pilih berkas Surat Pengantar RT/RW"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>3. Surat Pernyataan Kebenaran Data (Materai 10.000,-) *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_pernyataan_kebenaran')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_pernyataan_kebenaran ? files.file_pernyataan_kebenaran.name : "Pilih berkas Surat Pernyataan Kebenaran Data"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>4. Surat Pernyataan Tanggung Jawab Mutlak (SPTJM - Saksi & Materai) *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_sptjm')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_sptjm ? files.file_sptjm.name : "Pilih berkas SPTJM bermaterai"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>5. Fotocopy KTP Pewaris (Almarhum / Almarhumah) *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_ktp_pewaris')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_ktp_pewaris ? files.file_ktp_pewaris.name : "Pilih berkas KTP Pewaris"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>6. Fotocopy KTP Terbaru Para Ahli Waris *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_ktp_ahli_waris')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_ktp_ahli_waris ? files.file_ktp_ahli_waris.name : "Pilih berkas KTP Ahli Waris"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>7. Fotocopy KK Para Ahli Waris *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_kk_ahli_waris')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_kk_ahli_waris ? files.file_kk_ahli_waris.name : "Pilih berkas KK Ahli Waris"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>8. Fotocopy Akta Kelahiran Ahli Waris *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_akta_lahir_ahli_waris')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_akta_lahir_ahli_waris ? files.file_akta_lahir_ahli_waris.name : "Pilih berkas Akta Kelahiran Ahli Waris"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>9. Fotocopy KTP 2 Orang Saksi *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_ktp_saksi')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_ktp_saksi ? files.file_ktp_saksi.name : "Pilih berkas KTP 2 Orang Saksi"}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="form-group">
-            <label>2. Surat Pengantar yang ditandatangani RT-RW *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_pengantar_rt_rw')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_pengantar_rt_rw ? files.file_pengantar_rt_rw.name : "Pilih berkas Surat Pengantar RT/RW"}
-              </span>
-            </div>
-          </div>
+          {/* Sub-bagian B: Dokumen Kondisional */}
+          {showRelationshipDocs && (
+            <div style={{ marginBottom: '20px', backgroundColor: '#f0fdf4', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid #bbf7d0' }}>
+              <h4 style={{ color: 'var(--primary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                B. DOKUMEN KHUSUS (Hubungan: {formData.relationship})
+              </h4>
 
-          <div className="form-group">
-            <label>3. Surat Pernyataan Kebenaran Data dan Keabsahan Dokumen Pemohon (Materai 10.000,-) *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_pernyataan_kebenaran')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_pernyataan_kebenaran ? files.file_pernyataan_kebenaran.name : "Pilih berkas Surat Pernyataan Kebenaran Data"}
-              </span>
-            </div>
-          </div>
+              <div className="form-group">
+                <label>10. Surat Nikah Pewaris *</label>
+                <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
+                  <input 
+                    type="file" 
+                    accept=".pdf,image/*" 
+                    required={showRelationshipDocs}
+                    onChange={(e) => handleFileChange(e, 'file_surat_nikah_pewaris')}
+                  />
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    {files.file_surat_nikah_pewaris ? files.file_surat_nikah_pewaris.name : "Pilih berkas Surat Nikah Pewaris"}
+                  </span>
+                </div>
+              </div>
 
-          <div className="form-group">
-            <label>4. Surat Pernyataan Tanggung Jawab Mutlak Pemohon (Saksi KTP DKI & Materai 10.000,-) *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_sptjm')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_sptjm ? files.file_sptjm.name : "Pilih berkas SPTJM bermaterai"}
-              </span>
-            </div>
-          </div>
+              <div className="form-group">
+                <label>11. Fotocopy KTP Suami *</label>
+                <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
+                  <input 
+                    type="file" 
+                    accept=".pdf,image/*" 
+                    required={showRelationshipDocs}
+                    onChange={(e) => handleFileChange(e, 'file_ktp_suami')}
+                  />
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    {files.file_ktp_suami ? files.file_ktp_suami.name : "Pilih berkas KTP Suami"}
+                  </span>
+                </div>
+              </div>
 
-          <div className="form-group">
-            <label>5. Fotocopy KTP Pewaris (Almarhum / Almarhumah) *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_ktp_pewaris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_ktp_pewaris ? files.file_ktp_pewaris.name : "Pilih berkas KTP Pewaris"}
-              </span>
-            </div>
-          </div>
+              <div className="form-group">
+                <label>12. Fotocopy KTP Istri *</label>
+                <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
+                  <input 
+                    type="file" 
+                    accept=".pdf,image/*" 
+                    required={showRelationshipDocs}
+                    onChange={(e) => handleFileChange(e, 'file_ktp_istri')}
+                  />
+                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    {files.file_ktp_istri ? files.file_ktp_istri.name : "Pilih berkas KTP Istri"}
+                  </span>
+                </div>
+              </div>
 
-          <div className="form-group">
-            <label>6. Fotocopy KTP Terbaru Para Ahli Waris *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_ktp_ahli_waris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_ktp_ahli_waris ? files.file_ktp_ahli_waris.name : "Pilih berkas KTP Ahli Waris"}
-              </span>
+              {formData.is_divorced === 'Ya' && (
+                <div className="form-group">
+                  <label>13. Fotocopy Akta Cerai Pewaris *</label>
+                  <div className="file-input-wrapper" style={{ backgroundColor: '#fff', border: '1px solid var(--error)' }}>
+                    <input 
+                      type="file" 
+                      accept=".pdf,image/*" 
+                      required={formData.is_divorced === 'Ya'}
+                      onChange={(e) => handleFileChange(e, 'file_akta_cerai_pewaris')}
+                    />
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      {files.file_akta_cerai_pewaris ? files.file_akta_cerai_pewaris.name : "Pilih berkas Akta Cerai Pewaris"}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
-          <div className="form-group">
-            <label>7. Fotocopy KK Para Ahli Waris *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_kk_ahli_waris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_kk_ahli_waris ? files.file_kk_ahli_waris.name : "Pilih berkas KK Ahli Waris"}
-              </span>
+          {/* Sub-bagian C: Dokumen Opsional */}
+          <div style={{ marginBottom: '20px' }}>
+            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              C. DOKUMEN TAMBAHAN (Opsional / Jika Ada)
+            </h4>
+
+            <div className="form-group">
+              <label>14. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  onChange={(e) => handleFileChange(e, 'file_kematian_ahli_waris_wafat_lebih_dulu')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_kematian_ahli_waris_wafat_lebih_dulu ? files.file_kematian_ahli_waris_wafat_lebih_dulu.name : "Pilih berkas Surat Kematian Ahli Waris (jika ada)"}
+                </span>
+              </div>
             </div>
-          </div>
 
-          <div className="form-group">
-            <label>8. Fotocopy Akta Kelahiran / Surat Keterangan Lahir Para Ahli Waris *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_akta_lahir_ahli_waris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_akta_lahir_ahli_waris ? files.file_akta_lahir_ahli_waris.name : "Pilih berkas Akta Kelahiran Ahli Waris"}
-              </span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>9. Fotocopy Surat Nikah Pewaris (Suami/Istri) / Isbat Nikah *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_surat_nikah_pewaris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_surat_nikah_pewaris ? files.file_surat_nikah_pewaris.name : "Pilih berkas Surat Nikah Pewaris"}
-              </span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>10. Fotocopy Akta Kematian / Surat Keterangan Kematian Pewaris *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_akta_kematian_pewaris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_akta_kematian_pewaris ? files.file_akta_kematian_pewaris.name : "Pilih berkas Akta Kematian Pewaris"}
-              </span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>11. Fotocopy Akta Cerai Pewaris (Wajib diunggah) *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_akta_cerai_pewaris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_akta_cerai_pewaris ? files.file_akta_cerai_pewaris.name : "Pilih berkas Akta Cerai Pewaris"}
-              </span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>12. Fotocopy Surat Kematian / Akta Kematian Ahli Waris yang Wafat Lebih Dulu *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_kematian_ahli_waris')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_kematian_ahli_waris ? files.file_kematian_ahli_waris.name : "Pilih berkas Akta Kematian Ahli Waris"}
-              </span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>13. Fotocopy KTP 2 Orang Saksi *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_ktp_saksi')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_ktp_saksi ? files.file_ktp_saksi.name : "Pilih berkas KTP 2 Orang Saksi"}
-              </span>
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label>14. Fotocopy Surat Pernyataan Lainnya *</label>
-            <div className="file-input-wrapper">
-              <input 
-                type="file" 
-                accept=".pdf,image/*" 
-                required 
-                onChange={(e) => handleFileChange(e, 'file_pernyataan_lainnya')}
-              />
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_pernyataan_lainnya ? files.file_pernyataan_lainnya.name : "Pilih berkas Surat Pernyataan Lainnya"}
-              </span>
+            <div className="form-group">
+              <label>15. Dokumen Pendukung Lainnya</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  onChange={(e) => handleFileChange(e, 'file_pendukung_lainnya')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_pendukung_lainnya ? files.file_pendukung_lainnya.name : "Pilih berkas pendukung tambahan"}
+                </span>
+              </div>
             </div>
           </div>
 
