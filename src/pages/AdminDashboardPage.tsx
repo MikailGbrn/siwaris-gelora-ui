@@ -394,7 +394,7 @@ const AdminDashboardPage: React.FC = () => {
         {/* Details and Update Panel */}
         {selectedApp && (
           <div>
-            <div className="card" style={{ padding: '25px', position: 'sticky', top: '90px', maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
+            <div className="card" style={{ padding: '25px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '10px' }}>
                 <h3 style={{ margin: 0, color: 'var(--primary)' }}>Detail Permohonan</h3>
                 <button 
