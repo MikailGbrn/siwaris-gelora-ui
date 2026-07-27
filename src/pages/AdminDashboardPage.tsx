@@ -18,6 +18,7 @@ interface ApplicationData {
   heir_name: string;
   death_date: string;
   relationship: string;
+  is_divorced: string;
   file_permohonan: string;
   file_pengantar_rt_rw: string;
   file_pernyataan_kebenaran: string;
@@ -26,12 +27,14 @@ interface ApplicationData {
   file_ktp_ahli_waris: string;
   file_kk_ahli_waris: string;
   file_akta_lahir_ahli_waris: string;
-  file_surat_nikah_pewaris: string;
-  file_akta_kematian_pewaris: string;
-  file_akta_cerai_pewaris: string;
-  file_kematian_ahli_waris: string;
   file_ktp_saksi: string;
-  file_pernyataan_lainnya: string;
+  file_kematian_ahli_waris_wafat_lebih_dulu: string;
+  file_pendukung_lainnya: string;
+  file_surat_nikah_pewaris: string;
+  file_ktp_suami: string;
+  file_ktp_istri: string;
+  file_akta_cerai_pewaris: string;
+  rejected_files: string;
   admin_notes: string;
   estimated_completion: string;
   created_at: string;
@@ -51,6 +54,7 @@ const AdminDashboardPage: React.FC = () => {
   const [editNotes, setEditNotes] = useState('');
   const [editDate, setEditDate] = useState('');
   const [saving, setSaving] = useState(false);
+  const [rejectedFiles, setRejectedFiles] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -115,6 +119,16 @@ const AdminDashboardPage: React.FC = () => {
     setEditStatus(app.status);
     setEditNotes(app.admin_notes || '');
     setEditDate(app.estimated_completion || '');
+    
+    let initialRejected: string[] = [];
+    if (app.rejected_files) {
+      try {
+        initialRejected = JSON.parse(app.rejected_files);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    setRejectedFiles(initialRejected);
   };
 
   const handleSaveStatus = async (e: React.FormEvent) => {
@@ -138,7 +152,8 @@ const AdminDashboardPage: React.FC = () => {
         body: JSON.stringify({
           status: editStatus,
           admin_notes: editNotes,
-          estimated_completion: editDate
+          estimated_completion: editDate,
+          rejected_files: editStatus === 'Perlu Perbaikan' ? JSON.stringify(rejectedFiles) : '[]'
         })
       });
 
@@ -153,7 +168,8 @@ const AdminDashboardPage: React.FC = () => {
             ...app,
             status: editStatus,
             admin_notes: editNotes,
-            estimated_completion: editDate
+            estimated_completion: editDate,
+            rejected_files: editStatus === 'Perlu Perbaikan' ? JSON.stringify(rejectedFiles) : '[]'
           };
         }
         return app;
@@ -381,7 +397,7 @@ const AdminDashboardPage: React.FC = () => {
         {/* Details and Update Panel */}
         {selectedApp && (
           <div>
-            <div className="card" style={{ padding: '25px', position: 'sticky', top: '90px' }}>
+            <div className="card" style={{ padding: '25px', position: 'sticky', top: '90px', maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border)', paddingBottom: '10px' }}>
                 <h3 style={{ margin: 0, color: 'var(--primary)' }}>Detail Permohonan</h3>
                 <button 
@@ -432,86 +448,66 @@ const AdminDashboardPage: React.FC = () => {
                 </div>
 
                 {/* Uploaded Documents List */}
-                <div style={{ marginTop: '10px' }}>
-                  <strong style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '6px' }}>Dokumen Terunggah</strong>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '300px', overflowY: 'auto', paddingRight: '4px' }}>
-                    {selectedApp.file_permohonan && (
-                      <a href={`http://localhost:8080${selectedApp.file_permohonan}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 1. Surat Permohonan / Kuasa
-                      </a>
-                    )}
-                    {selectedApp.file_pengantar_rt_rw && (
-                      <a href={`http://localhost:8080${selectedApp.file_pengantar_rt_rw}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 2. Surat Pengantar RT/RW
-                      </a>
-                    )}
-                    {selectedApp.file_pernyataan_kebenaran && (
-                      <a href={`http://localhost:8080${selectedApp.file_pernyataan_kebenaran}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 3. Surat Pernyataan Kebenaran Data (Materai)
-                      </a>
-                    )}
-                    {selectedApp.file_sptjm && (
-                      <a href={`http://localhost:8080${selectedApp.file_sptjm}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 4. SPTJM (Saksi & Materai)
-                      </a>
-                    )}
-                    {selectedApp.file_ktp_pewaris && (
-                      <a href={`http://localhost:8080${selectedApp.file_ktp_pewaris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 5. KTP Pewaris (Almarhum)
-                      </a>
-                    )}
-                    {selectedApp.file_ktp_ahli_waris && (
-                      <a href={`http://localhost:8080${selectedApp.file_ktp_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 6. KTP Ahli Waris
-                      </a>
-                    )}
-                    {selectedApp.file_kk_ahli_waris && (
-                      <a href={`http://localhost:8080${selectedApp.file_kk_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 7. KK Ahli Waris
-                      </a>
-                    )}
-                    {selectedApp.file_akta_lahir_ahli_waris && (
-                      <a href={`http://localhost:8080${selectedApp.file_akta_lahir_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 8. Akta Kelahiran Ahli Waris
-                      </a>
-                    )}
-                    {selectedApp.file_ktp_saksi && (
-                      <a href={`http://localhost:8080${selectedApp.file_ktp_saksi}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 9. KTP 2 Orang Saksi
-                      </a>
-                    )}
-                    {selectedApp.file_surat_nikah_pewaris && (
-                      <a href={`http://localhost:8080${selectedApp.file_surat_nikah_pewaris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 10. Surat Nikah Pewaris
-                      </a>
-                    )}
-                    {selectedApp.file_ktp_suami && (
-                      <a href={`http://localhost:8080${selectedApp.file_ktp_suami}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 11. KTP Suami / Ayah
-                      </a>
-                    )}
-                    {selectedApp.file_ktp_istri && (
-                      <a href={`http://localhost:8080${selectedApp.file_ktp_istri}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 12. KTP Istri / Ibu
-                      </a>
-                    )}
-                    {selectedApp.file_akta_cerai_pewaris && (
-                      <a href={`http://localhost:8080${selectedApp.file_akta_cerai_pewaris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 13. Akta Cerai Pewaris
-                      </a>
-                    )}
-                    {selectedApp.file_kematian_ahli_waris && (
-                      <a href={`http://localhost:8080${selectedApp.file_kematian_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 14. Surat Kematian Ahli Waris Wafat Lebih Dulu
-                      </a>
-                    )}
-                    {selectedApp.file_pernyataan_lainnya && (
-                      <a href={`http://localhost:8080${selectedApp.file_pernyataan_lainnya}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> 15. Dokumen Pendukung Lain
-                      </a>
-                    )}
-                  </div>
-                </div>
+                {(() => {
+                  const documentList = [
+                    { key: 'file_permohonan', path: selectedApp.file_permohonan, label: 'Surat Permohonan / Kuasa' },
+                    { key: 'file_pengantar_rt_rw', path: selectedApp.file_pengantar_rt_rw, label: 'Surat Pengantar RT/RW' },
+                    { key: 'file_pernyataan_kebenaran', path: selectedApp.file_pernyataan_kebenaran, label: 'Surat Pernyataan Kebenaran Data (Materai)' },
+                    { key: 'file_sptjm', path: selectedApp.file_sptjm, label: 'SPTJM (Saksi & Materai)' },
+                    { key: 'file_ktp_pewaris', path: selectedApp.file_ktp_pewaris, label: 'KTP Pewaris (Almarhum)' },
+                    { key: 'file_ktp_ahli_waris', path: selectedApp.file_ktp_ahli_waris, label: 'KTP Ahli Waris' },
+                    { key: 'file_kk_ahli_waris', path: selectedApp.file_kk_ahli_waris, label: 'KK Ahli Waris' },
+                    { key: 'file_akta_lahir_ahli_waris', path: selectedApp.file_akta_lahir_ahli_waris, label: 'Akta Kelahiran Ahli Waris' },
+                    { key: 'file_ktp_saksi', path: selectedApp.file_ktp_saksi, label: 'KTP 2 Orang Saksi' },
+                    { key: 'file_surat_nikah_pewaris', path: selectedApp.file_surat_nikah_pewaris, label: 'Surat Nikah Pewaris' },
+                    { key: 'file_ktp_suami', path: selectedApp.file_ktp_suami, label: 'KTP Suami / Ayah' },
+                    { key: 'file_ktp_istri', path: selectedApp.file_ktp_istri, label: 'KTP Istri / Ibu' },
+                    { key: 'file_akta_cerai_pewaris', path: selectedApp.file_akta_cerai_pewaris, label: 'Akta Cerai Pewaris' },
+                    { key: 'file_kematian_ahli_waris_wafat_lebih_dulu', path: selectedApp.file_kematian_ahli_waris_wafat_lebih_dulu, label: 'Surat Kematian Ahli Waris Wafat Lebih Dulu' },
+                    { key: 'file_pendukung_lainnya', path: selectedApp.file_pendukung_lainnya, label: 'Dokumen Pendukung Lain' }
+                  ];
+
+                  const uploadedDocs = documentList.filter(doc => doc.path);
+
+                  return (
+                    <div style={{ marginTop: '10px' }}>
+                      <strong style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '6px' }}>
+                        Dokumen Terunggah ({uploadedDocs.length} Berkas)
+                      </strong>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {uploadedDocs.map((doc, idx) => (
+                          <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <a 
+                              href={`http://localhost:8080${doc.path}`} 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="btn btn-outline" 
+                              style={{ flex: 1, justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}
+                            >
+                              <FileText size={14} /> {idx + 1}. {doc.label}
+                            </a>
+                            {editStatus === 'Perlu Perbaikan' && (
+                              <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.8rem', cursor: 'pointer', margin: 0, whiteSpace: 'nowrap' }}>
+                                <input 
+                                  type="checkbox" 
+                                  checked={rejectedFiles.includes(doc.key)}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setRejectedFiles(prev => [...prev, doc.key]);
+                                    } else {
+                                      setRejectedFiles(prev => prev.filter(k => k !== doc.key));
+                                    }
+                                  }}
+                                />
+                                Minta Unggah Ulang
+                              </label>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Status Update Form */}
