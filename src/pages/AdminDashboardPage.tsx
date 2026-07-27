@@ -18,11 +18,20 @@ interface ApplicationData {
   heir_name: string;
   death_date: string;
   relationship: string;
-  file_ktp: string;
-  file_kk: string;
-  file_death_cert: string;
-  file_rt_rw: string;
-  file_other: string;
+  file_permohonan: string;
+  file_pengantar_rt_rw: string;
+  file_pernyataan_kebenaran: string;
+  file_sptjm: string;
+  file_ktp_pewaris: string;
+  file_ktp_ahli_waris: string;
+  file_kk_ahli_waris: string;
+  file_akta_lahir_ahli_waris: string;
+  file_surat_nikah_pewaris: string;
+  file_akta_kematian_pewaris: string;
+  file_akta_cerai_pewaris: string;
+  file_kematian_ahli_waris: string;
+  file_ktp_saksi: string;
+  file_pernyataan_lainnya: string;
   admin_notes: string;
   estimated_completion: string;
   created_at: string;
@@ -419,25 +428,50 @@ const AdminDashboardPage: React.FC = () => {
 
                 {/* Uploaded Documents List */}
                 <div style={{ marginTop: '10px' }}>
-                  <strong style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '6px' }}>Dokumen Terunggah</strong>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <a href={`http://localhost:8080${selectedApp.file_ktp}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                      <FileText size={14} /> KTP Ahli Waris
+                  <strong style={{ color: 'var(--text-secondary)', display: 'block', fontSize: '0.75rem', textTransform: 'uppercase', marginBottom: '6px' }}>Dokumen Terunggah (14 Persyaratan)</strong>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '300px', overflowY: 'auto', paddingRight: '4px' }}>
+                    <a href={`http://localhost:8080${selectedApp.file_permohonan}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 1. Surat Permohonan / Kuasa
                     </a>
-                    <a href={`http://localhost:8080${selectedApp.file_kk}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                      <FileText size={14} /> Kartu Keluarga
+                    <a href={`http://localhost:8080${selectedApp.file_pengantar_rt_rw}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 2. Surat Pengantar RT/RW
                     </a>
-                    <a href={`http://localhost:8080${selectedApp.file_death_cert}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                      <FileText size={14} /> Akta Kematian
+                    <a href={`http://localhost:8080${selectedApp.file_pernyataan_kebenaran}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 3. Surat Pernyataan Kebenaran Data (Materai)
                     </a>
-                    <a href={`http://localhost:8080${selectedApp.file_rt_rw}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                      <FileText size={14} /> Pengantar RT/RW
+                    <a href={`http://localhost:8080${selectedApp.file_sptjm}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 4. SPTJM (Saksi & Materai)
                     </a>
-                    {selectedApp.file_other && (
-                      <a href={`http://localhost:8080${selectedApp.file_other}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
-                        <FileText size={14} /> Dokumen Pendukung Lain
-                      </a>
-                    )}
+                    <a href={`http://localhost:8080${selectedApp.file_ktp_pewaris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 5. KTP Pewaris (Almarhum)
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_ktp_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 6. KTP Ahli Waris
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_kk_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 7. KK Ahli Waris
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_akta_lahir_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 8. Akta Kelahiran Ahli Waris
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_surat_nikah_pewaris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 9. Surat Nikah Pewaris
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_akta_kematian_pewaris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 10. Akta/Surat Kematian Pewaris
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_akta_cerai_pewaris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 11. Akta Cerai Pewaris
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_kematian_ahli_waris}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 12. Akta Kematian Ahli Waris
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_ktp_saksi}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 13. KTP 2 Orang Saksi
+                    </a>
+                    <a href={`http://localhost:8080${selectedApp.file_pernyataan_lainnya}`} target="_blank" rel="noreferrer" className="btn btn-outline" style={{ justifyContent: 'flex-start', padding: '8px 12px', fontSize: '0.85rem' }}>
+                      <FileText size={14} /> 14. Surat Pernyataan Lainnya
+                    </a>
                   </div>
                 </div>
               </div>
