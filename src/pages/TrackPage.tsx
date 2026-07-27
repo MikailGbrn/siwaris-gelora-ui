@@ -334,12 +334,6 @@ const TrackPage: React.FC = () => {
                 </div>
               </div>
 
-              {result.estimated_completion && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '24px', paddingTop: '15px', borderTop: '1px solid var(--border)', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-                  <Calendar size={16} />
-                  <span>Estimasi Selesai: <strong>{result.estimated_completion}</strong></span>
-                </div>
-              )}
             </div>
 
             {/* Dynamic Revision Form */}

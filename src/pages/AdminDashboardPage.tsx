@@ -52,7 +52,6 @@ const AdminDashboardPage: React.FC = () => {
   // Form edit states
   const [editStatus, setEditStatus] = useState('');
   const [editNotes, setEditNotes] = useState('');
-  const [editDate, setEditDate] = useState('');
   const [saving, setSaving] = useState(false);
   const [rejectedFiles, setRejectedFiles] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -118,7 +117,6 @@ const AdminDashboardPage: React.FC = () => {
     setSelectedApp(app);
     setEditStatus(app.status);
     setEditNotes(app.admin_notes || '');
-    setEditDate(app.estimated_completion || '');
     
     let initialRejected: string[] = [];
     if (app.rejected_files) {
@@ -135,9 +133,8 @@ const AdminDashboardPage: React.FC = () => {
     e.preventDefault();
     if (!selectedApp) return;
 
-    const today = new Date().toISOString().split('T')[0];
-    if (editDate && editDate < today) {
-      alert('Tanggal estimasi selesai tidak boleh sebelum hari ini.');
+    if (editStatus === 'Perlu Perbaikan' && rejectedFiles.length === 0) {
+      alert('Mohon tandai minimal satu berkas yang perlu perbaikan (centang "Minta Unggah Ulang") sebelum mengubah status menjadi Perlu Perbaikan.');
       return;
     }
 
@@ -152,7 +149,7 @@ const AdminDashboardPage: React.FC = () => {
         body: JSON.stringify({
           status: editStatus,
           admin_notes: editNotes,
-          estimated_completion: editDate,
+          estimated_completion: '',
           rejected_files: editStatus === 'Perlu Perbaikan' ? JSON.stringify(rejectedFiles) : '[]'
         })
       });
@@ -168,7 +165,7 @@ const AdminDashboardPage: React.FC = () => {
             ...app,
             status: editStatus,
             admin_notes: editNotes,
-            estimated_completion: editDate,
+            estimated_completion: '',
             rejected_files: editStatus === 'Perlu Perbaikan' ? JSON.stringify(rejectedFiles) : '[]'
           };
         }
@@ -180,7 +177,7 @@ const AdminDashboardPage: React.FC = () => {
         ...prev,
         status: editStatus,
         admin_notes: editNotes,
-        estimated_completion: editDate
+        estimated_completion: ''
       } : null);
 
       alert('Status permohonan berhasil diperbarui!');
@@ -528,18 +525,6 @@ const AdminDashboardPage: React.FC = () => {
                     <option value="Menunggu TTD">Menunggu TTD</option>
                     <option value="Selesai">Selesai</option>
                   </select>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="editDate">Estimasi Selesai</label>
-                  <input 
-                    type="date" 
-                    id="editDate" 
-                    className="form-control"
-                    min={new Date().toISOString().split('T')[0]}
-                    value={editDate}
-                    onChange={(e) => setEditDate(e.target.value)}
-                  />
                 </div>
 
                 <div className="form-group">
