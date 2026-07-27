@@ -21,11 +21,20 @@ const ApplyPage: React.FC = () => {
   });
 
   const [files, setFiles] = useState<{ [key: string]: File | null }>({
-    file_ktp: null,
-    file_kk: null,
-    file_death_cert: null,
-    file_rt_rw: null,
-    file_other: null
+    file_permohonan: null,
+    file_pengantar_rt_rw: null,
+    file_pernyataan_kebenaran: null,
+    file_sptjm: null,
+    file_ktp_pewaris: null,
+    file_ktp_ahli_waris: null,
+    file_kk_ahli_waris: null,
+    file_akta_lahir_ahli_waris: null,
+    file_surat_nikah_pewaris: null,
+    file_akta_kematian_pewaris: null,
+    file_akta_cerai_pewaris: null,
+    file_kematian_ahli_waris: null,
+    file_ktp_saksi: null,
+    file_pernyataan_lainnya: null
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -55,12 +64,30 @@ const ApplyPage: React.FC = () => {
     setError(null);
 
     if (!formData.agreement) {
+      alert('Anda harus menyetujui pernyataan kebenaran data.');
       setError('Anda harus menyetujui pernyataan kebenaran data.');
       return;
     }
 
-    if (!files.file_ktp || !files.file_kk || !files.file_death_cert || !files.file_rt_rw) {
-      setError('Semua dokumen wajib harus diunggah.');
+    const today = new Date().toISOString().split('T')[0];
+    if (formData.death_date && formData.death_date > today) {
+      alert('Tanggal meninggal dunia tidak boleh di masa depan.');
+      setError('Tanggal meninggal dunia tidak boleh di masa depan.');
+      return;
+    }
+
+    const requiredKeys = [
+      'file_permohonan', 'file_pengantar_rt_rw', 'file_pernyataan_kebenaran', 'file_sptjm',
+      'file_ktp_pewaris', 'file_ktp_ahli_waris', 'file_kk_ahli_waris', 'file_akta_lahir_ahli_waris',
+      'file_surat_nikah_pewaris', 'file_akta_kematian_pewaris', 'file_akta_cerai_pewaris',
+      'file_kematian_ahli_waris', 'file_ktp_saksi', 'file_pernyataan_lainnya'
+    ];
+
+    const missing = requiredKeys.filter(k => !files[k]);
+    if (missing.length > 0) {
+      const msg = 'Semua 14 berkas persyaratan wajib diunggah.';
+      alert(msg);
+      setError(msg);
       return;
     }
 
@@ -131,7 +158,7 @@ const ApplyPage: React.FC = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container" style={{ paddingBottom: '60px' }}>
       <div style={{ marginBottom: '20px' }}>
         <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: '500' }}>
           <ChevronLeft size={16} /> Kembali
@@ -272,6 +299,7 @@ const ApplyPage: React.FC = () => {
                 name="death_date" 
                 className="form-control" 
                 required 
+                max={new Date().toISOString().split('T')[0]}
                 value={formData.death_date} 
                 onChange={handleInputChange}
               />
@@ -298,79 +326,215 @@ const ApplyPage: React.FC = () => {
 
           {/* Bagian 3: Upload Berkas */}
           <h3 style={{ borderBottom: '2px solid var(--primary-light)', paddingBottom: '8px', color: 'var(--primary)', marginBottom: '20px', marginTop: '40px' }}>
-            III. UNGGAH DOKUMEN PERSYARATAN (Maksimal 5MB, Format PDF/Gambar)
+            III. UNGGAH DOKUMEN PERSYARATAN (Maksimal 5MB, Format PDF/Gambar - Wajib Semua)
           </h3>
 
           <div className="form-group">
-            <label>Kartu Tanda Penduduk (KTP) Ahli Waris *</label>
+            <label>1. Permohonan oleh Para Ahli Waris / Kuasa Waris *</label>
             <div className="file-input-wrapper">
               <input 
                 type="file" 
                 accept=".pdf,image/*" 
                 required 
-                onChange={(e) => handleFileChange(e, 'file_ktp')}
+                onChange={(e) => handleFileChange(e, 'file_permohonan')}
               />
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_ktp ? files.file_ktp.name : "Pilih file PDF atau Gambar KTP"}
+                {files.file_permohonan ? files.file_permohonan.name : "Pilih berkas Surat Permohonan / Kuasa"}
               </span>
             </div>
           </div>
 
           <div className="form-group">
-            <label>Kartu Keluarga (KK) *</label>
+            <label>2. Surat Pengantar yang ditandatangani RT-RW *</label>
             <div className="file-input-wrapper">
               <input 
                 type="file" 
                 accept=".pdf,image/*" 
                 required 
-                onChange={(e) => handleFileChange(e, 'file_kk')}
+                onChange={(e) => handleFileChange(e, 'file_pengantar_rt_rw')}
               />
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_kk ? files.file_kk.name : "Pilih file PDF atau Gambar KK"}
+                {files.file_pengantar_rt_rw ? files.file_pengantar_rt_rw.name : "Pilih berkas Surat Pengantar RT/RW"}
               </span>
             </div>
           </div>
 
           <div className="form-group">
-            <label>Akta Kematian Pewaris *</label>
+            <label>3. Surat Pernyataan Kebenaran Data dan Keabsahan Dokumen Pemohon (Materai 10.000,-) *</label>
             <div className="file-input-wrapper">
               <input 
                 type="file" 
                 accept=".pdf,image/*" 
                 required 
-                onChange={(e) => handleFileChange(e, 'file_death_cert')}
+                onChange={(e) => handleFileChange(e, 'file_pernyataan_kebenaran')}
               />
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_death_cert ? files.file_death_cert.name : "Pilih file PDF/Gambar Akta Kematian"}
+                {files.file_pernyataan_kebenaran ? files.file_pernyataan_kebenaran.name : "Pilih berkas Surat Pernyataan Kebenaran Data"}
               </span>
             </div>
           </div>
 
           <div className="form-group">
-            <label>Surat Pengantar RT/RW *</label>
+            <label>4. Surat Pernyataan Tanggung Jawab Mutlak Pemohon (Saksi KTP DKI & Materai 10.000,-) *</label>
             <div className="file-input-wrapper">
               <input 
                 type="file" 
                 accept=".pdf,image/*" 
                 required 
-                onChange={(e) => handleFileChange(e, 'file_rt_rw')}
+                onChange={(e) => handleFileChange(e, 'file_sptjm')}
               />
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_rt_rw ? files.file_rt_rw.name : "Pilih file PDF/Gambar Pengantar RT/RW"}
+                {files.file_sptjm ? files.file_sptjm.name : "Pilih berkas SPTJM bermaterai"}
               </span>
             </div>
           </div>
 
           <div className="form-group">
-            <label>Dokumen Pendukung Lainnya (Opsional)</label>
+            <label>5. Fotocopy KTP Pewaris (Almarhum / Almarhumah) *</label>
             <div className="file-input-wrapper">
               <input 
                 type="file" 
                 accept=".pdf,image/*" 
-                onChange={(e) => handleFileChange(e, 'file_other')}
+                required 
+                onChange={(e) => handleFileChange(e, 'file_ktp_pewaris')}
               />
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                {files.file_other ? files.file_other.name : "Pilih file pendukung tambahan"}
+                {files.file_ktp_pewaris ? files.file_ktp_pewaris.name : "Pilih berkas KTP Pewaris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>6. Fotocopy KTP Terbaru Para Ahli Waris *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_ktp_ahli_waris')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_ktp_ahli_waris ? files.file_ktp_ahli_waris.name : "Pilih berkas KTP Ahli Waris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>7. Fotocopy KK Para Ahli Waris *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_kk_ahli_waris')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_kk_ahli_waris ? files.file_kk_ahli_waris.name : "Pilih berkas KK Ahli Waris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>8. Fotocopy Akta Kelahiran / Surat Keterangan Lahir Para Ahli Waris *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_akta_lahir_ahli_waris')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_akta_lahir_ahli_waris ? files.file_akta_lahir_ahli_waris.name : "Pilih berkas Akta Kelahiran Ahli Waris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>9. Fotocopy Surat Nikah Pewaris (Suami/Istri) / Isbat Nikah *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_surat_nikah_pewaris')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_surat_nikah_pewaris ? files.file_surat_nikah_pewaris.name : "Pilih berkas Surat Nikah Pewaris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>10. Fotocopy Akta Kematian / Surat Keterangan Kematian Pewaris *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_akta_kematian_pewaris')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_akta_kematian_pewaris ? files.file_akta_kematian_pewaris.name : "Pilih berkas Akta Kematian Pewaris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>11. Fotocopy Akta Cerai Pewaris (Wajib diunggah) *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_akta_cerai_pewaris')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_akta_cerai_pewaris ? files.file_akta_cerai_pewaris.name : "Pilih berkas Akta Cerai Pewaris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>12. Fotocopy Surat Kematian / Akta Kematian Ahli Waris yang Wafat Lebih Dulu *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_kematian_ahli_waris')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_kematian_ahli_waris ? files.file_kematian_ahli_waris.name : "Pilih berkas Akta Kematian Ahli Waris"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>13. Fotocopy KTP 2 Orang Saksi *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_ktp_saksi')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_ktp_saksi ? files.file_ktp_saksi.name : "Pilih berkas KTP 2 Orang Saksi"}
+              </span>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>14. Fotocopy Surat Pernyataan Lainnya *</label>
+            <div className="file-input-wrapper">
+              <input 
+                type="file" 
+                accept=".pdf,image/*" 
+                required 
+                onChange={(e) => handleFileChange(e, 'file_pernyataan_lainnya')}
+              />
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                {files.file_pernyataan_lainnya ? files.file_pernyataan_lainnya.name : "Pilih berkas Surat Pernyataan Lainnya"}
               </span>
             </div>
           </div>
@@ -381,6 +545,7 @@ const ApplyPage: React.FC = () => {
               type="checkbox" 
               id="agreement" 
               name="agreement" 
+              required
               style={{ marginTop: '4px', transform: 'scale(1.2)' }}
               checked={formData.agreement}
               onChange={handleInputChange}
