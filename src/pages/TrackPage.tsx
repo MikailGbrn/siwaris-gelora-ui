@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ChevronLeft, Calendar, Clock, AlertTriangle, CheckCircle2, Award, FileText, Loader2, Send } from 'lucide-react';
+import { API_URL } from '../config';
 
 interface ApplicationData {
   id: number;
@@ -56,7 +57,7 @@ const TrackPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/track?reg_num=${encodeURIComponent(regNum)}&nik=${encodeURIComponent(nik)}`);
+      const response = await fetch(`${API_URL}/api/track?reg_num=${encodeURIComponent(regNum)}&nik=${encodeURIComponent(nik)}`);
       if (!response.ok) {
         const text = await response.text();
         throw new Error(text || 'Permohonan tidak ditemukan.');
@@ -162,7 +163,7 @@ const TrackPage: React.FC = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:8080/api/apply/revision', {
+      const response = await fetch(`${API_URL}/api/apply/revision`, {
         method: 'POST',
         body: data,
       });

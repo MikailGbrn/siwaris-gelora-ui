@@ -4,6 +4,7 @@ import {
   Users, CheckCircle, Clock, AlertTriangle, FileSpreadsheet, 
   Search, Eye, LogOut, Loader2, Download, FileText, Calendar, Edit3 
 } from 'lucide-react';
+import { API_URL, getFileUrl } from '../config';
 
 interface ApplicationData {
   id: number;
@@ -70,7 +71,7 @@ const AdminDashboardPage: React.FC = () => {
   const fetchApplications = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/admin/applications', {
+      const response = await fetch(`${API_URL}/api/admin/applications`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -140,7 +141,7 @@ const AdminDashboardPage: React.FC = () => {
 
     setSaving(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/applications/${selectedApp.id}`, {
+      const response = await fetch(`${API_URL}/api/admin/applications/${selectedApp.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -190,7 +191,7 @@ const AdminDashboardPage: React.FC = () => {
 
   const handleDownloadPDF = async (appId: number, regNum: string) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/applications/${appId}/pdf`, {
+      const response = await fetch(`${API_URL}/api/admin/applications/${appId}/pdf`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -475,7 +476,7 @@ const AdminDashboardPage: React.FC = () => {
                         {uploadedDocs.map((doc, idx) => (
                           <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <a 
-                              href={`http://localhost:8080${doc.path}`} 
+                              href={getFileUrl(doc.path)} 
                               target="_blank" 
                               rel="noreferrer" 
                               className="btn btn-outline" 

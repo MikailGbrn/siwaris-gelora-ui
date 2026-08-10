@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, Send, CheckCircle2, Loader2, Info } from 'lucide-react';
+import { API_URL } from '../config';
 
 const ApplyPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -124,7 +125,7 @@ const ApplyPage: React.FC = () => {
     });
 
     try {
-      const response = await fetch('http://localhost:8080/api/apply', {
+      const response = await fetch(`${API_URL}/api/apply`, {
         method: 'POST',
         body: data,
       });
@@ -137,8 +138,11 @@ const ApplyPage: React.FC = () => {
       const result = await response.json();
       setSuccessData(result);
     } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'Terjadi kesalahan sistem, silakan coba lagi nanti.');
+      console.error("Detail Error:", err);
+      const userFriendlyMsg = 'Gagal mengirimkan permohonan. Silakan periksa kembali berkas Anda atau coba beberapa saat lagi.';
+      setError(userFriendlyMsg);
+      alert(userFriendlyMsg);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setLoading(false);
     }
@@ -655,6 +659,43 @@ const ApplyPage: React.FC = () => {
           </div>
         </form>
       </div>
+
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100vw',
+          height: '100vh',
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(5px)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 99999,
+        }}>
+          <style>{`
+            @keyframes spin-overlay {
+              to { transform: rotate(360deg); }
+            }
+            .spinner-overlay {
+              width: 50px;
+              height: 50px;
+              border: 5px solid #e2e8f0;
+              border-top-color: var(--primary);
+              border-radius: 50%;
+              animation: spin-overlay 1s linear infinite;
+              margin-bottom: 20px;
+            }
+          `}</style>
+          <div className="spinner-overlay" />
+          <h3 style={{ color: 'var(--primary)', margin: 0, fontWeight: 'bold' }}>Mengirimkan Permohonan...</h3>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '8px', fontSize: '0.95rem' }}>
+            Mohon tunggu, berkas Anda sedang diunggah ke sistem.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
