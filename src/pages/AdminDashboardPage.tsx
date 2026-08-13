@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Users, CheckCircle, Clock, AlertTriangle, FileSpreadsheet, 
-  Search, Eye, LogOut, Loader2, Download, FileText, Calendar, Edit3 
+  CheckCircle, Clock, AlertTriangle, FileSpreadsheet, 
+  Search, Eye, LogOut, Loader2, Download, FileText, Edit3 
 } from 'lucide-react';
 import { API_URL, getFileUrl } from '../config';
 
@@ -55,7 +55,6 @@ const AdminDashboardPage: React.FC = () => {
   const [editNotes, setEditNotes] = useState('');
   const [saving, setSaving] = useState(false);
   const [rejectedFiles, setRejectedFiles] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const token = localStorage.getItem('admin_token');
@@ -89,7 +88,7 @@ const AdminDashboardPage: React.FC = () => {
       setFilteredApps(data);
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Terjadi kesalahan saat memuat data.');
+      alert(err.message || 'Terjadi kesalahan saat memuat data.');
     } finally {
       setLoading(false);
     }
