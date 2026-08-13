@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronLeft, Send, CheckCircle2, Loader2, Info } from 'lucide-react';
+import { ChevronLeft, Send, CheckCircle2, Loader2 } from 'lucide-react';
 import { API_URL } from '../config';
 
 const ApplyPage: React.FC = () => {

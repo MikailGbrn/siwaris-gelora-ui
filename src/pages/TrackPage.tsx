@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ChevronLeft, Calendar, Clock, AlertTriangle, CheckCircle2, Award, FileText, Loader2, Send } from 'lucide-react';
+import { Search, ChevronLeft, Clock, AlertTriangle, CheckCircle2, Award, Loader2, Send } from 'lucide-react';
 import { API_URL } from '../config';
 
 interface ApplicationData {
