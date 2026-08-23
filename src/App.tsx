@@ -14,21 +14,15 @@ const Navigation: React.FC = () => {
     <nav className="navbar">
       <div className="container nav-container">
         <Link to="/" className="logo-section">
-          {/* Logo DKI placeholder or design */}
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '50%',
-            backgroundColor: 'var(--primary)',
-            color: '#fff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '1rem'
-          }}>
-            JAYA
-          </div>
+          <img 
+            src="/jaya-raya.png" 
+            alt="Logo Jakarta Jaya Raya" 
+            style={{
+              height: '42px',
+              objectFit: 'contain',
+              marginRight: '8px'
+            }}
+          />
           <div>
             <span className="logo-text">SIWARIS GELORA</span>
             <span className="logo-subtext">Kelurahan Gelora - Jakarta Pusat</span>
