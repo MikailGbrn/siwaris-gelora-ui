@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   CheckCircle, Clock, AlertTriangle, FileSpreadsheet, 
-  Search, Eye, LogOut, Loader2, Download, FileText, Edit3 
+  Search, Eye, LogOut, Loader2, FileText, Edit3 
 } from 'lucide-react';
 import { API_URL, getFileUrl } from '../config';
 
@@ -189,27 +189,7 @@ const AdminDashboardPage: React.FC = () => {
     }
   };
 
-  const handleDownloadPDF = async (appId: number, regNum: string) => {
-    try {
-      const response = await fetch(`${API_URL}/api/admin/applications/${appId}/pdf`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if (!response.ok) throw new Error('Gagal generate PDF.');
 
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `Dossier_${regNum}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    } catch (err) {
-      alert('Gagal mengunduh dokumen PDF.');
-    }
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
@@ -406,16 +386,7 @@ const AdminDashboardPage: React.FC = () => {
                 </button>
               </div>
 
-              {/* Action: Download PDF */}
-              <div style={{ marginBottom: '20px' }}>
-                <button 
-                  onClick={() => handleDownloadPDF(selectedApp.id, selectedApp.registration_number)} 
-                  className="btn btn-primary"
-                  style={{ width: '100%', backgroundColor: 'var(--primary)' }}
-                >
-                  <Download size={16} /> Unduh Berkas PDF
-                </button>
-              </div>
+
 
               {/* Informational details */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', marginBottom: '25px' }}>

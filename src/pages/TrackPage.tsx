@@ -111,10 +111,11 @@ const TrackPage: React.FC = () => {
   // Human-readable labels for files
   const getFileLabel = (key: string) => {
     switch (key) {
-      case 'file_permohonan': return 'Surat Permohonan / Kuasa';
+      case 'file_permohonan': return 'Surat Permohonan Ahli Waris';
       case 'file_pengantar_rt_rw': return 'Surat Pengantar RT/RW';
-      case 'file_pernyataan_kebenaran': return 'Surat Pernyataan Kebenaran Data (Materai)';
+      case 'file_pernyataan_kebenaran': return 'Surat Pernyataan (Materai 10.000,-)';
       case 'file_sptjm': return 'SPTJM (Saksi & Materai)';
+      case 'file_surat_kuasa': return 'Surat Kuasa Ahli Waris';
       case 'file_ktp_pewaris': return 'KTP Pewaris (Almarhum)';
       case 'file_ktp_ahli_waris': return 'KTP Ahli Waris';
       case 'file_kk_ahli_waris': return 'KK Ahli Waris';
