@@ -32,6 +32,7 @@ interface ApplicationData {
   file_ktp_suami: string;
   file_ktp_istri: string;
   file_akta_cerai_pewaris: string;
+  file_surat_kuasa: string;
   rejected_files: string;
   admin_notes: string;
   estimated_completion: string;

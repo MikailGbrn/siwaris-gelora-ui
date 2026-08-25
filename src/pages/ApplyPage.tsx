@@ -27,6 +27,7 @@ const ApplyPage: React.FC = () => {
     file_pengantar_rt_rw: null,
     file_pernyataan_kebenaran: null,
     file_sptjm: null,
+    file_surat_kuasa: null,
     file_ktp_pewaris: null,
     file_ktp_ahli_waris: null,
     file_kk_ahli_waris: null,
@@ -205,7 +206,7 @@ const ApplyPage: React.FC = () => {
         <form onSubmit={handleSubmit}>
           {/* Bagian 1: Data Pemohon */}
           <h3 style={{ borderBottom: '2px solid var(--primary-light)', paddingBottom: '8px', color: 'var(--primary)', marginBottom: '20px' }}>
-            I. DATA PEMOHON
+            I. DATA PEMOHON (ahli waris)
           </h3>
 
           <div className="form-group">
@@ -380,22 +381,7 @@ const ApplyPage: React.FC = () => {
             </h4>
             
             <div className="form-group">
-              <label>1. Permohonan Ahli Waris / Kuasa Waris *</label>
-              <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
-                  onChange={(e) => handleFileChange(e, 'file_permohonan')}
-                />
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                  {files.file_permohonan ? files.file_permohonan.name : "Pilih berkas Surat Permohonan / Surat Kuasa"}
-                </span>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>2. Surat Pengantar RT/RW *</label>
+              <label>1. Surat Pengantar RT/RW *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -410,7 +396,22 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>3. Surat Pernyataan Kebenaran Data (Materai 10.000,-) *</label>
+              <label>2. Surat Permohonan Ahli Waris *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_permohonan')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_permohonan ? files.file_permohonan.name : "Pilih berkas Surat Permohonan"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>3. Surat Pernyataan (Materai 10.000,-) *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -419,7 +420,7 @@ const ApplyPage: React.FC = () => {
                   onChange={(e) => handleFileChange(e, 'file_pernyataan_kebenaran')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                  {files.file_pernyataan_kebenaran ? files.file_pernyataan_kebenaran.name : "Pilih berkas Surat Pernyataan Kebenaran Data"}
+                  {files.file_pernyataan_kebenaran ? files.file_pernyataan_kebenaran.name : "Pilih berkas Surat Pernyataan"}
                 </span>
               </div>
             </div>
@@ -440,7 +441,21 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>5. Fotocopy KTP Pewaris (Almarhum / Almarhumah) *</label>
+              <label>5. Surat Kuasa Ahli Waris</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  onChange={(e) => handleFileChange(e, 'file_surat_kuasa')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_surat_kuasa ? files.file_surat_kuasa.name : "Pilih berkas Surat Kuasa Ahli Waris (jika ada)"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>6. Fotocopy KTP Pewaris (Almarhum / Almarhumah) *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -455,7 +470,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>6. Fotocopy KTP Terbaru Para Ahli Waris *</label>
+              <label>7. Fotocopy KTP Terbaru Para Ahli Waris *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -470,7 +485,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>7. Fotocopy KK Para Ahli Waris *</label>
+              <label>8. Fotocopy KK Para Ahli Waris *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -485,7 +500,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>8. Fotocopy Akta Kelahiran Ahli Waris *</label>
+              <label>9. Fotocopy Akta Kelahiran Ahli Waris *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -500,7 +515,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>9. Fotocopy KTP 2 Orang Saksi *</label>
+              <label>10. Fotocopy KTP 2 Orang Saksi *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -523,7 +538,7 @@ const ApplyPage: React.FC = () => {
               </h4>
 
               <div className="form-group">
-                <label>10. Surat Nikah Pewaris *</label>
+                <label>11. Surat Nikah Pewaris *</label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
                   <input 
                     type="file" 
@@ -538,7 +553,7 @@ const ApplyPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>11. Fotocopy KTP Suami *</label>
+                <label>12. Fotocopy KTP Suami *</label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
                   <input 
                     type="file" 
@@ -553,7 +568,7 @@ const ApplyPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>12. Fotocopy KTP Istri *</label>
+                <label>13. Fotocopy KTP Istri *</label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
                   <input 
                     type="file" 
@@ -569,7 +584,7 @@ const ApplyPage: React.FC = () => {
 
               {formData.is_divorced === 'Ya' && (
                 <div className="form-group">
-                  <label>13. Fotocopy Akta Cerai Pewaris *</label>
+                  <label>14. Fotocopy Akta Cerai Pewaris *</label>
                   <div className="file-input-wrapper" style={{ backgroundColor: '#fff', border: '1px solid var(--error)' }}>
                     <input 
                       type="file" 
@@ -593,7 +608,7 @@ const ApplyPage: React.FC = () => {
             </h4>
 
             <div className="form-group">
-              <label>14. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
+              <label>15. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -607,7 +622,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>15. Dokumen Pendukung Lainnya</label>
+              <label>16. Dokumen Pendukung Lainnya</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
