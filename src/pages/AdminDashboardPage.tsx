@@ -35,6 +35,7 @@ interface ApplicationData {
   file_ktp_suami: string;
   file_ktp_istri: string;
   file_akta_cerai_pewaris: string;
+  file_surat_kuasa: string;
   rejected_files: string;
   admin_notes: string;
   estimated_completion: string;
@@ -447,10 +448,11 @@ const AdminDashboardPage: React.FC = () => {
                 {/* Uploaded Documents List */}
                 {(() => {
                   const documentList = [
-                    { key: 'file_permohonan', path: selectedApp.file_permohonan, label: 'Surat Permohonan / Kuasa' },
                     { key: 'file_pengantar_rt_rw', path: selectedApp.file_pengantar_rt_rw, label: 'Surat Pengantar RT/RW' },
-                    { key: 'file_pernyataan_kebenaran', path: selectedApp.file_pernyataan_kebenaran, label: 'Surat Pernyataan Kebenaran Data (Materai)' },
+                    { key: 'file_permohonan', path: selectedApp.file_permohonan, label: 'Surat Permohonan Ahli Waris' },
+                    { key: 'file_pernyataan_kebenaran', path: selectedApp.file_pernyataan_kebenaran, label: 'Surat Pernyataan (Materai)' },
                     { key: 'file_sptjm', path: selectedApp.file_sptjm, label: 'SPTJM (Saksi & Materai)' },
+                    { key: 'file_surat_kuasa', path: selectedApp.file_surat_kuasa, label: 'Surat Kuasa Ahli Waris' },
                     { key: 'file_ktp_pewaris', path: selectedApp.file_ktp_pewaris, label: 'KTP Pewaris (Almarhum)' },
                     { key: 'file_ktp_ahli_waris', path: selectedApp.file_ktp_ahli_waris, label: 'KTP Ahli Waris' },
                     { key: 'file_kk_ahli_waris', path: selectedApp.file_kk_ahli_waris, label: 'KK Ahli Waris' },
