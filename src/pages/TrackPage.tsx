@@ -23,6 +23,7 @@ interface ApplicationData {
   file_sptjm: string;
   file_ktp_pewaris: string;
   file_ktp_ahli_waris: string;
+  file_kematian_pewaris: string;
   file_kk_ahli_waris: string;
   file_akta_lahir_ahli_waris: string;
   file_ktp_saksi: string;
@@ -114,10 +115,11 @@ const TrackPage: React.FC = () => {
       case 'file_permohonan': return 'Surat Permohonan Ahli Waris';
       case 'file_pengantar_rt_rw': return 'Surat Pengantar RT/RW';
       case 'file_pernyataan_kebenaran': return 'Surat Pernyataan (Materai 10.000,-)';
-      case 'file_sptjm': return 'SPTJM (Saksi & Materai)';
+      case 'file_sptjm': return 'Surat Pernyataan Tanggung Jawab Mutlak (2 Saksi & Materai)';
       case 'file_surat_kuasa': return 'Surat Kuasa Ahli Waris';
       case 'file_ktp_pewaris': return 'KTP Pewaris (Almarhum)';
       case 'file_ktp_ahli_waris': return 'KTP Ahli Waris';
+      case 'file_kematian_pewaris': return 'Surat Kematian Pewaris';
       case 'file_kk_ahli_waris': return 'KK Ahli Waris';
       case 'file_akta_lahir_ahli_waris': return 'Akta Kelahiran Ahli Waris';
       case 'file_ktp_saksi': return 'KTP 2 Orang Saksi';

@@ -144,17 +144,16 @@ const LandingPage: React.FC = () => {
               <li style={{ marginBottom: '8px' }}>
                 Mengisi Surat Kuasa (<a href="/format-surat-kuasa.pdf" target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}>link format</a>)
               </li>
-              <li style={{ marginBottom: '8px' }}>Foto Copy KTP dan KK Pewaris (warga Kelurahan Gelora)</li>
+              <li style={{ marginBottom: '8px' }}>Foto Copy KTP dan KK Pewaris <strong>(warga Kelurahan Gelora)</strong></li>
               <li style={{ marginBottom: '8px' }}>Foto Copy Surat Kematian Pewaris</li>
               <li style={{ marginBottom: '8px' }}>Foto Copy Surat Nikah Pewaris (bila belum menikah diganti dengan akte lahir almarhum)</li>
               <li style={{ marginBottom: '8px' }}>Foto Copy Akta Cerai Pewaris (bila bercerai)</li>
               <li style={{ marginBottom: '8px' }}>Foto Copy Akte Kelahiran, KTP dan KK Para Ahli Waris</li>
-              <li style={{ marginBottom: '8px' }}>Foto Copy Surat Nikah (bila ada)</li>
+              <li style={{ marginBottom: '8px' }}>Foto Copy Surat Nikah Para Ahli Waris(bila ada)</li>
               <li style={{ marginBottom: '8px' }}>Foto Copy Surat Kematian Ahli Waris (apabila Ahli Waris telah meninggal)</li>
-              <li style={{ marginBottom: '8px' }}>Foto Copy KTP, KK, Surat Nikah (bila ada) dan Akta Kelahiran anak kandung dari ahli waris yang telah meninggal</li>
               <li style={{ marginBottom: '8px' }}>Surat Pernyataan Belum Menikah dan/atau Tidak Memiliki Anak (bila pewaris belum menikah dan/atau tidak mempunyai anak)</li>
-              <li style={{ marginBottom: '8px' }}>Bila berkaitan dengan pendaftaran tanah di BPN, atau pembagian warisan, disarankan untuk mengajukan permohonan fatwa waris ke pengadilan agama setempat bagi yang beragama Islam, atau ke pengadilan negeri setempat atau notaris</li>
-              <li style={{ marginBottom: '8px' }}>Berkas yang sudah lengkap selanjutnya akan diverifikasi oleh petugas. Pemohon bisa memantau status melalui menu <strong>Cek Status</strong>.</li>
+              <li style={{ marginBottom: '8px' }}>Bila berkaitan dengan pendaftaran tanah di BPN, atau pembagian warisan, disarankan untuk mengajukan permohonan fatwa waris ke pengadilan agama setempat bagi yang beragama islam, atau ke pengadilan negeri setempat atau notaris</li>
+              <li style={{ marginBottom: '8px' }}>Berkas yang sudah lengkap selanjutnya akan diverifikasi oleh petugas, Pemohon bisa melihat status Pelayanan melalui Cek Status</li>
             </ol>
           </div>
 

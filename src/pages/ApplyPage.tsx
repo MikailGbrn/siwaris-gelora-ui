@@ -30,6 +30,7 @@ const ApplyPage: React.FC = () => {
     file_surat_kuasa: null,
     file_ktp_pewaris: null,
     file_ktp_ahli_waris: null,
+    file_kematian_pewaris: null,
     file_kk_ahli_waris: null,
     file_akta_lahir_ahli_waris: null,
     file_ktp_saksi: null,
@@ -83,7 +84,7 @@ const ApplyPage: React.FC = () => {
     // 1. Validate Global Mandatory Files
     const globalMandatoryKeys = [
       'file_permohonan', 'file_pengantar_rt_rw', 'file_pernyataan_kebenaran', 'file_sptjm',
-      'file_ktp_pewaris', 'file_ktp_ahli_waris', 'file_kk_ahli_waris', 'file_akta_lahir_ahli_waris',
+      'file_ktp_pewaris', 'file_ktp_ahli_waris', 'file_kematian_pewaris', 'file_kk_ahli_waris', 'file_akta_lahir_ahli_waris',
       'file_ktp_saksi'
     ];
     const missingGlobal = globalMandatoryKeys.filter(k => !files[k]);
@@ -270,7 +271,7 @@ const ApplyPage: React.FC = () => {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="applicant_phone">Nomor HP / WhatsApp</label>
+              <label htmlFor="applicant_phone">Nomor HP / WhatsApp *</label>
               <input 
                 type="tel" 
                 id="applicant_phone" 
@@ -283,7 +284,7 @@ const ApplyPage: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="applicant_email">Alamat Email</label>
+              <label htmlFor="applicant_email">Alamat Email *</label>
               <input 
                 type="email" 
                 id="applicant_email" 
@@ -341,7 +342,6 @@ const ApplyPage: React.FC = () => {
                 onChange={handleInputChange}
               >
                 <option value="">-- Pilih Hubungan --</option>
-                <option value="Anak Kandung">Anak Kandung</option>
                 <option value="Istri / Suami">Istri / Suami</option>
                 <option value="Orang Tua">Orang Tua</option>
                 <option value="Saudara Kandung">Saudara Kandung</option>
@@ -426,7 +426,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>4. Surat Pernyataan Tanggung Jawab Mutlak (SPTJM - Saksi & Materai) *</label>
+              <label>4. Surat Pernyataan Tanggung Jawab Mutlak (2 Saksi & Materai) *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -485,7 +485,22 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>8. Fotocopy KK Para Ahli Waris *</label>
+              <label>8. Surat Kematian Pewaris *</label>
+              <div className="file-input-wrapper">
+                <input 
+                  type="file" 
+                  accept=".pdf,image/*" 
+                  required 
+                  onChange={(e) => handleFileChange(e, 'file_kematian_pewaris')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_kematian_pewaris ? files.file_kematian_pewaris.name : "Pilih berkas Surat Kematian Pewaris"}
+                </span>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label>9. Fotocopy KK Para Ahli Waris *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -500,7 +515,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>9. Fotocopy Akta Kelahiran Ahli Waris *</label>
+              <label>10. Fotocopy Akta Kelahiran Ahli Waris *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -515,7 +530,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>10. Fotocopy KTP 2 Orang Saksi *</label>
+              <label>11. Fotocopy KTP 2 Orang Saksi *</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -538,7 +553,7 @@ const ApplyPage: React.FC = () => {
               </h4>
 
               <div className="form-group">
-                <label>11. Surat Nikah Pewaris *</label>
+                <label>12. Surat Nikah Pewaris *</label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
                   <input 
                     type="file" 
@@ -553,7 +568,7 @@ const ApplyPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>12. Fotocopy KTP Suami *</label>
+                <label>13. Fotocopy KTP Suami *</label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
                   <input 
                     type="file" 
@@ -568,7 +583,7 @@ const ApplyPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>13. Fotocopy KTP Istri *</label>
+                <label>14. Fotocopy KTP Istri *</label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
                   <input 
                     type="file" 
@@ -584,7 +599,7 @@ const ApplyPage: React.FC = () => {
 
               {formData.is_divorced === 'Ya' && (
                 <div className="form-group">
-                  <label>14. Fotocopy Akta Cerai Pewaris *</label>
+                  <label>15. Fotocopy Akta Cerai Pewaris *</label>
                   <div className="file-input-wrapper" style={{ backgroundColor: '#fff', border: '1px solid var(--error)' }}>
                     <input 
                       type="file" 
@@ -608,7 +623,7 @@ const ApplyPage: React.FC = () => {
             </h4>
 
             <div className="form-group">
-              <label>15. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
+              <label>16. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
@@ -622,7 +637,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>16. Dokumen Pendukung Lainnya</label>
+              <label>17. Dokumen Pendukung Lainnya</label>
               <div className="file-input-wrapper">
                 <input 
                   type="file" 
