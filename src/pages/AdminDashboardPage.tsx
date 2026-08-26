@@ -26,6 +26,7 @@ interface ApplicationData {
   file_sptjm: string;
   file_ktp_pewaris: string;
   file_ktp_ahli_waris: string;
+  file_kematian_pewaris: string;
   file_kk_ahli_waris: string;
   file_akta_lahir_ahli_waris: string;
   file_ktp_saksi: string;
@@ -422,10 +423,11 @@ const AdminDashboardPage: React.FC = () => {
                     { key: 'file_pengantar_rt_rw', path: selectedApp.file_pengantar_rt_rw, label: 'Surat Pengantar RT/RW' },
                     { key: 'file_permohonan', path: selectedApp.file_permohonan, label: 'Surat Permohonan Ahli Waris' },
                     { key: 'file_pernyataan_kebenaran', path: selectedApp.file_pernyataan_kebenaran, label: 'Surat Pernyataan (Materai)' },
-                    { key: 'file_sptjm', path: selectedApp.file_sptjm, label: 'SPTJM (Saksi & Materai)' },
+                    { key: 'file_sptjm', path: selectedApp.file_sptjm, label: 'Surat Pernyataan Tanggung Jawab Mutlak (2 Saksi & Materai)' },
                     { key: 'file_surat_kuasa', path: selectedApp.file_surat_kuasa, label: 'Surat Kuasa Ahli Waris' },
                     { key: 'file_ktp_pewaris', path: selectedApp.file_ktp_pewaris, label: 'KTP Pewaris (Almarhum)' },
                     { key: 'file_ktp_ahli_waris', path: selectedApp.file_ktp_ahli_waris, label: 'KTP Ahli Waris' },
+                    { key: 'file_kematian_pewaris', path: selectedApp.file_kematian_pewaris, label: 'Surat Kematian Pewaris' },
                     { key: 'file_kk_ahli_waris', path: selectedApp.file_kk_ahli_waris, label: 'KK Ahli Waris' },
                     { key: 'file_akta_lahir_ahli_waris', path: selectedApp.file_akta_lahir_ahli_waris, label: 'Akta Kelahiran Ahli Waris' },
                     { key: 'file_ktp_saksi', path: selectedApp.file_ktp_saksi, label: 'KTP 2 Orang Saksi' },
