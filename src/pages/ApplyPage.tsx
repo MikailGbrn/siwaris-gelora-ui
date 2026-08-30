@@ -7,7 +7,7 @@ const ApplyPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [successData, setSuccessData] = useState<{ registration_number: string } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  
+
   const [formData, setFormData] = useState({
     applicant_name: '',
     applicant_nik: '',
@@ -83,7 +83,7 @@ const ApplyPage: React.FC = () => {
 
     // 1. Validate Global Mandatory Files
     const globalMandatoryKeys = [
-      'file_permohonan', 'file_pengantar_rt_rw', 'file_pernyataan_kebenaran', 'file_sptjm',
+      'file_permohonan', 'file_pengantar_rt_rw', 'file_pernyataan_kebenaran',
       'file_ktp_pewaris', 'file_ktp_ahli_waris', 'file_kematian_pewaris', 'file_kk_ahli_waris', 'file_akta_lahir_ahli_waris',
       'file_ktp_saksi'
     ];
@@ -163,7 +163,7 @@ const ApplyPage: React.FC = () => {
           <p style={{ color: 'var(--text-secondary)', marginBottom: '30px' }}>
             Permohonan Anda berhasil diterima.
           </p>
-          
+
           <div style={{ background: '#f8fafc', border: '1px dashed var(--border)', padding: '20px', borderRadius: 'var(--radius-md)', marginBottom: '30px' }}>
             <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Nomor Registrasi Anda</span>
             <h3 style={{ fontSize: '1.8rem', color: 'var(--primary)', margin: '10px 0 0 0', fontWeight: '800' }}>
@@ -212,14 +212,14 @@ const ApplyPage: React.FC = () => {
 
           <div className="form-group">
             <label htmlFor="applicant_name">Nama Lengkap Pemohon</label>
-            <input 
-              type="text" 
-              id="applicant_name" 
-              name="applicant_name" 
-              className="form-control" 
-              required 
-              value={formData.applicant_name} 
-              onChange={handleInputChange} 
+            <input
+              type="text"
+              id="applicant_name"
+              name="applicant_name"
+              className="form-control"
+              required
+              value={formData.applicant_name}
+              onChange={handleInputChange}
               placeholder="Masukkan nama lengkap Anda"
             />
           </div>
@@ -227,28 +227,28 @@ const ApplyPage: React.FC = () => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="applicant_nik">NIK (Nomor Induk Kependudukan)</label>
-              <input 
-                type="text" 
-                id="applicant_nik" 
-                name="applicant_nik" 
-                className="form-control" 
-                required 
+              <input
+                type="text"
+                id="applicant_nik"
+                name="applicant_nik"
+                className="form-control"
+                required
                 maxLength={16}
-                value={formData.applicant_nik} 
+                value={formData.applicant_nik}
                 onChange={handleInputChange}
                 placeholder="16 digit NIK"
               />
             </div>
             <div className="form-group">
               <label htmlFor="applicant_kk">Nomor KK (Kartu Keluarga)</label>
-              <input 
-                type="text" 
-                id="applicant_kk" 
-                name="applicant_kk" 
-                className="form-control" 
-                required 
+              <input
+                type="text"
+                id="applicant_kk"
+                name="applicant_kk"
+                className="form-control"
+                required
                 maxLength={16}
-                value={formData.applicant_kk} 
+                value={formData.applicant_kk}
                 onChange={handleInputChange}
                 placeholder="16 digit No. KK"
               />
@@ -257,13 +257,13 @@ const ApplyPage: React.FC = () => {
 
           <div className="form-group">
             <label htmlFor="applicant_address">Alamat Lengkap</label>
-            <textarea 
-              id="applicant_address" 
-              name="applicant_address" 
-              className="form-control" 
-              required 
+            <textarea
+              id="applicant_address"
+              name="applicant_address"
+              className="form-control"
+              required
               rows={3}
-              value={formData.applicant_address} 
+              value={formData.applicant_address}
               onChange={handleInputChange}
               placeholder="Tulis alamat lengkap sesuai KTP"
             />
@@ -271,27 +271,27 @@ const ApplyPage: React.FC = () => {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="applicant_phone">Nomor HP / WhatsApp *</label>
-              <input 
-                type="tel" 
-                id="applicant_phone" 
-                name="applicant_phone" 
-                className="form-control" 
-                required 
-                value={formData.applicant_phone} 
+              <label htmlFor="applicant_phone">Nomor HP / WhatsApp</label>
+              <input
+                type="tel"
+                id="applicant_phone"
+                name="applicant_phone"
+                className="form-control"
+                required
+                value={formData.applicant_phone}
                 onChange={handleInputChange}
                 placeholder="Contoh: 08123456789"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="applicant_email">Alamat Email *</label>
-              <input 
-                type="email" 
-                id="applicant_email" 
-                name="applicant_email" 
-                className="form-control" 
-                required 
-                value={formData.applicant_email} 
+              <label htmlFor="applicant_email">Alamat Email</label>
+              <input
+                type="email"
+                id="applicant_email"
+                name="applicant_email"
+                className="form-control"
+                required
+                value={formData.applicant_email}
                 onChange={handleInputChange}
                 placeholder="Contoh: nama@domain.com"
               />
@@ -305,13 +305,13 @@ const ApplyPage: React.FC = () => {
 
           <div className="form-group">
             <label htmlFor="heir_name">Nama Pewaris (Almarhum / Almarhumah)</label>
-            <input 
-              type="text" 
-              id="heir_name" 
-              name="heir_name" 
-              className="form-control" 
-              required 
-              value={formData.heir_name} 
+            <input
+              type="text"
+              id="heir_name"
+              name="heir_name"
+              className="form-control"
+              required
+              value={formData.heir_name}
               onChange={handleInputChange}
               placeholder="Masukkan nama pewaris"
             />
@@ -320,25 +320,25 @@ const ApplyPage: React.FC = () => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="death_date">Tanggal Meninggal Dunia</label>
-              <input 
-                type="date" 
-                id="death_date" 
-                name="death_date" 
-                className="form-control" 
-                required 
+              <input
+                type="date"
+                id="death_date"
+                name="death_date"
+                className="form-control"
+                required
                 max={new Date().toISOString().split('T')[0]}
-                value={formData.death_date} 
+                value={formData.death_date}
                 onChange={handleInputChange}
               />
             </div>
             <div className="form-group">
               <label htmlFor="relationship">Hubungan Keluarga Ahli Waris</label>
-              <select 
-                id="relationship" 
-                name="relationship" 
-                className="form-control" 
-                required 
-                value={formData.relationship} 
+              <select
+                id="relationship"
+                name="relationship"
+                className="form-control"
+                required
+                value={formData.relationship}
                 onChange={handleInputChange}
               >
                 <option value="">-- Pilih Hubungan --</option>
@@ -379,14 +379,14 @@ const ApplyPage: React.FC = () => {
             <h4 style={{ color: 'var(--secondary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               A. DOKUMEN WAJIB UTAMA (Semua Pemohon)
             </h4>
-            
+
             <div className="form-group">
-              <label>1. Surat Pengantar RT/RW *</label>
+              <label>1. Surat Pengantar RT/RW <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_pengantar_rt_rw')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -396,12 +396,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>2. Surat Permohonan Ahli Waris *</label>
+              <label>2. Surat Permohonan Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_permohonan')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -411,12 +411,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>3. Surat Pernyataan (Materai 10.000,-) *</label>
+              <label>3. Surat Pernyataan (Materai 10.000,-) <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_pernyataan_kebenaran')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -426,26 +426,11 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>4. Surat Pernyataan Tanggung Jawab Mutlak (2 Saksi & Materai) *</label>
+              <label>4. Surat Kuasa Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
-                  onChange={(e) => handleFileChange(e, 'file_sptjm')}
-                />
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                  {files.file_sptjm ? files.file_sptjm.name : "Pilih berkas SPTJM bermaterai"}
-                </span>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>5. Surat Kuasa Ahli Waris</label>
-              <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
                   onChange={(e) => handleFileChange(e, 'file_surat_kuasa')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -455,12 +440,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>6. Fotocopy KTP Pewaris (Almarhum / Almarhumah) *</label>
+              <label>5. Fotocopy KTP Pewaris (Almarhum / Almarhumah) <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_ktp_pewaris')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -470,12 +455,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>7. Fotocopy KTP Terbaru Para Ahli Waris *</label>
+              <label>6. Fotocopy KTP Terbaru Para Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_ktp_ahli_waris')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -485,12 +470,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>8. Surat Kematian Pewaris *</label>
+              <label>7. Surat Kematian Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_kematian_pewaris')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -500,12 +485,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>9. Fotocopy KK Para Ahli Waris *</label>
+              <label>8. Fotocopy KK Para Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_kk_ahli_waris')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -515,12 +500,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>10. Fotocopy Akta Kelahiran Ahli Waris *</label>
+              <label>9. Fotocopy Akta Kelahiran Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_akta_lahir_ahli_waris')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -530,12 +515,12 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>11. Fotocopy KTP 2 Orang Saksi *</label>
+              <label>10. Fotocopy KTP 2 Orang Saksi <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
-                  required 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
                   onChange={(e) => handleFileChange(e, 'file_ktp_saksi')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -553,11 +538,11 @@ const ApplyPage: React.FC = () => {
               </h4>
 
               <div className="form-group">
-                <label>12. Surat Nikah Pewaris *</label>
+                <label>11. Surat Nikah Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
-                  <input 
-                    type="file" 
-                    accept=".pdf,image/*" 
+                  <input
+                    type="file"
+                    accept=".pdf,image/*"
                     required={showRelationshipDocs}
                     onChange={(e) => handleFileChange(e, 'file_surat_nikah_pewaris')}
                   />
@@ -568,11 +553,11 @@ const ApplyPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>13. Fotocopy KTP Suami *</label>
+                <label>12. Fotocopy KTP Suami <span style={{ color: 'var(--error)' }}>*</span></label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
-                  <input 
-                    type="file" 
-                    accept=".pdf,image/*" 
+                  <input
+                    type="file"
+                    accept=".pdf,image/*"
                     required={showRelationshipDocs}
                     onChange={(e) => handleFileChange(e, 'file_ktp_suami')}
                   />
@@ -583,11 +568,11 @@ const ApplyPage: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label>14. Fotocopy KTP Istri *</label>
+                <label>13. Fotocopy KTP Istri <span style={{ color: 'var(--error)' }}>*</span></label>
                 <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
-                  <input 
-                    type="file" 
-                    accept=".pdf,image/*" 
+                  <input
+                    type="file"
+                    accept=".pdf,image/*"
                     required={showRelationshipDocs}
                     onChange={(e) => handleFileChange(e, 'file_ktp_istri')}
                   />
@@ -599,11 +584,11 @@ const ApplyPage: React.FC = () => {
 
               {formData.is_divorced === 'Ya' && (
                 <div className="form-group">
-                  <label>15. Fotocopy Akta Cerai Pewaris *</label>
+                  <label>14. Fotocopy Akta Cerai Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
                   <div className="file-input-wrapper" style={{ backgroundColor: '#fff', border: '1px solid var(--error)' }}>
-                    <input 
-                      type="file" 
-                      accept=".pdf,image/*" 
+                    <input
+                      type="file"
+                      accept=".pdf,image/*"
                       required={formData.is_divorced === 'Ya'}
                       onChange={(e) => handleFileChange(e, 'file_akta_cerai_pewaris')}
                     />
@@ -623,11 +608,11 @@ const ApplyPage: React.FC = () => {
             </h4>
 
             <div className="form-group">
-              <label>16. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
+              <label>15. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
                   onChange={(e) => handleFileChange(e, 'file_kematian_ahli_waris_wafat_lebih_dulu')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -637,11 +622,11 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>17. Dokumen Pendukung Lainnya</label>
+              <label>16. Dokumen Pendukung Lainnya</label>
               <div className="file-input-wrapper">
-                <input 
-                  type="file" 
-                  accept=".pdf,image/*" 
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
                   onChange={(e) => handleFileChange(e, 'file_pendukung_lainnya')}
                 />
                 <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
@@ -653,10 +638,10 @@ const ApplyPage: React.FC = () => {
 
           {/* Persetujuan */}
           <div style={{ margin: '30px 0', display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-            <input 
-              type="checkbox" 
-              id="agreement" 
-              name="agreement" 
+            <input
+              type="checkbox"
+              id="agreement"
+              name="agreement"
               required
               style={{ marginTop: '4px', transform: 'scale(1.2)' }}
               checked={formData.agreement}
@@ -668,9 +653,9 @@ const ApplyPage: React.FC = () => {
           </div>
 
           <div style={{ textAlign: 'center' }}>
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
+            <button
+              type="submit"
+              className="btn btn-primary"
               style={{ width: '100%', maxWidth: '300px', display: 'inline-flex', justifyContent: 'center' }}
               disabled={loading}
             >
