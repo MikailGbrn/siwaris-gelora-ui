@@ -207,7 +207,7 @@ const ApplyPage: React.FC = () => {
         <form onSubmit={handleSubmit}>
           {/* Bagian 1: Data Pemohon */}
           <h3 style={{ borderBottom: '2px solid var(--primary-light)', paddingBottom: '8px', color: 'var(--primary)', marginBottom: '20px' }}>
-            I. DATA PEMOHON (ahli waris)
+            I. DATA PEMOHON
           </h3>
 
           <div className="form-group">
