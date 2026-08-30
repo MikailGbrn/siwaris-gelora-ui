@@ -76,7 +76,7 @@ const LandingPage: React.FC = () => {
                 color: 'var(--primary)'
               }}>4</div>
               <div className="info-title" style={{ color: '#fff' }}>Selesai</div>
-              <div className="info-desc" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Ambil dokumen di kantor</div>
+              <div className="info-desc" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Ambil dokumen di kantor kelurahan Gelora</div>
             </div>
           </div>
 
