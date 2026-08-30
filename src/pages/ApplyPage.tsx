@@ -332,7 +332,7 @@ const ApplyPage: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="relationship">Hubungan Keluarga Ahli Waris</label>
+              <label htmlFor="relationship">Hubungan Keluarga</label>
               <select
                 id="relationship"
                 name="relationship"
@@ -342,6 +342,7 @@ const ApplyPage: React.FC = () => {
                 onChange={handleInputChange}
               >
                 <option value="">-- Pilih Hubungan --</option>
+                <option value="Anak Kandung">Anak Kandung</option>
                 <option value="Istri / Suami">Istri / Suami</option>
                 <option value="Orang Tua">Orang Tua</option>
                 <option value="Saudara Kandung">Saudara Kandung</option>
