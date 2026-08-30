@@ -3,26 +3,26 @@ import { Link } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
   return (
-    <div style={{ 
-      margin: '-40px 0', 
-      width: '100%', 
+    <div style={{
+      margin: '-40px 0',
+      width: '100%',
       display: 'flex',
       flexDirection: 'column'
     }}>
       {/* 1. Hero Section (Deep Navy Blue) */}
-      <section style={{ 
-        backgroundColor: 'var(--primary)', 
-        color: '#fff', 
-        padding: '60px 20px', 
-        textAlign: 'center' 
+      <section style={{
+        backgroundColor: 'var(--primary)',
+        color: '#fff',
+        padding: '60px 20px',
+        textAlign: 'center'
       }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <h1 style={{ color: '#fff', fontSize: '2.5rem', marginBottom: '12px', fontWeight: 'bold' }}>
             SIWARIS GELORA
           </h1>
-          <p style={{ 
-            color: 'rgba(255, 255, 255, 0.85)', 
-            marginBottom: '40px', 
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.85)',
+            marginBottom: '40px',
             fontSize: '1.1rem',
             lineHeight: '1.6',
             maxWidth: '750px',
@@ -35,9 +35,9 @@ const LandingPage: React.FC = () => {
           <div className="infographic" style={{ margin: '40px 0' }}>
             {/* Step 1 (Active) */}
             <div className="info-step active">
-              <div className="info-icon" style={{ 
-                backgroundColor: 'var(--secondary)', 
-                borderColor: 'var(--secondary)', 
+              <div className="info-icon" style={{
+                backgroundColor: 'var(--secondary)',
+                borderColor: 'var(--secondary)',
                 color: 'var(--primary)',
                 transform: 'scale(1.1)',
                 fontWeight: 'bold'
@@ -48,10 +48,10 @@ const LandingPage: React.FC = () => {
 
             {/* Step 2 */}
             <div className="info-step">
-              <div className="info-icon" style={{ 
-                backgroundColor: '#fff', 
-                borderColor: '#fff', 
-                color: 'var(--primary)' 
+              <div className="info-icon" style={{
+                backgroundColor: '#fff',
+                borderColor: '#fff',
+                color: 'var(--primary)'
               }}>2</div>
               <div className="info-title" style={{ color: '#fff' }}>Verifikasi</div>
               <div className="info-desc" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Petugas memverifikasi berkas</div>
@@ -59,10 +59,10 @@ const LandingPage: React.FC = () => {
 
             {/* Step 3 */}
             <div className="info-step">
-              <div className="info-icon" style={{ 
-                backgroundColor: '#fff', 
-                borderColor: '#fff', 
-                color: 'var(--primary)' 
+              <div className="info-icon" style={{
+                backgroundColor: '#fff',
+                borderColor: '#fff',
+                color: 'var(--primary)'
               }}>3</div>
               <div className="info-title" style={{ color: '#fff' }}>Proses</div>
               <div className="info-desc" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Tanda tangan Lurah</div>
@@ -70,10 +70,10 @@ const LandingPage: React.FC = () => {
 
             {/* Step 4 */}
             <div className="info-step">
-              <div className="info-icon" style={{ 
-                backgroundColor: '#fff', 
-                borderColor: '#fff', 
-                color: 'var(--primary)' 
+              <div className="info-icon" style={{
+                backgroundColor: '#fff',
+                borderColor: '#fff',
+                color: 'var(--primary)'
               }}>4</div>
               <div className="info-title" style={{ color: '#fff' }}>Selesai</div>
               <div className="info-desc" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Ambil dokumen di kantor</div>
@@ -92,37 +92,37 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* 2. Requirements Section (Soft Light Blue Background + Clean White Card) */}
-      <section style={{ 
+      <section style={{
         backgroundColor: '#eef4fc', // var(--primary-light)
-        padding: '60px 20px' 
+        padding: '60px 20px'
       }}>
-        <div style={{ 
-          maxWidth: '800px', 
-          margin: '0 auto', 
-          backgroundColor: '#fff', 
-          padding: '40px', 
+        <div style={{
+          maxWidth: '800px',
+          margin: '0 auto',
+          backgroundColor: '#fff',
+          padding: '40px',
           borderRadius: 'var(--radius-lg)',
           boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05)',
           border: '1px solid #cbd5e1'
         }}>
-          <h2 style={{ 
-            color: 'var(--primary)', 
-            borderBottom: '2px solid var(--secondary)', 
-            paddingBottom: '12px', 
-            marginBottom: '24px', 
-            fontSize: '1.6rem', 
+          <h2 style={{
+            color: 'var(--primary)',
+            borderBottom: '2px solid var(--secondary)',
+            paddingBottom: '12px',
+            marginBottom: '24px',
+            fontSize: '1.6rem',
             fontWeight: 'bold',
             marginTop: 0
           }}>
             Informasi & Persyaratan Pelayanan
           </h2>
-          
+
           <div style={{ marginBottom: '24px' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '8px' }}>
               Dasar Hukum
             </h3>
             <p style={{ fontSize: '0.95rem', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.6' }}>
-              Keputusan Walikota Administrasi Jakarta Pusat Provinsi DKI Jakarta Nomor e-0054 Tahun 2026 Tentang Pedoman Standar Pelayanan Administrasi Kecamatan Kelurahan Kota Administrasi Jakarta Pusat (<a href="/sk-wjp-54-2026.pdf" target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}>lihat selengkapnya</a>).
+              Keputusan Lurah Kelurahan Gelora Kecamatan Tanah Abang Kota Administrasi Jakarta Pusat Nomor 24 Tahun 2026 Tentang Standar Pelayanan Administrasi Kelurahan Gelora Kecamatan Tanah Abang Kota Administrasi Jakarta Pusat (<a href="/sk-lurah-24-2026.pdf" target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}>lihat selengkapnya</a>).
             </p>
           </div>
 
@@ -130,16 +130,13 @@ const LandingPage: React.FC = () => {
             <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '12px' }}>
               Persyaratan Dokumen
             </h3>
-            <ol style={{ paddingLeft: '20px', margin: 0, fontSize: '0.95rem', color: 'var(--text-secondary)', lineHeight: '1.7' }}>
+            <ol style={{ paddingLeft: '20px', margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)', lineHeight: '1.7' }}>
               <li style={{ marginBottom: '8px' }}>Surat Pengantar RT/RW</li>
               <li style={{ marginBottom: '8px' }}>
                 Mengisi Surat Permohonan untuk register (<a href="/format-surat-permohonan.pdf" target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}>link format</a>)
               </li>
               <li style={{ marginBottom: '8px' }}>
                 Mengisi Surat Pernyataan (<a href="/format-surat-pernyataan.pdf" target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}>link format</a>)
-              </li>
-              <li style={{ marginBottom: '8px' }}>
-                Mengisi Surat Pernyataan Tanggung Jawab Mutlak (<a href="/format-surat-pernyataan-tanggung-jawab-mutlak.pdf" target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}>link format</a>)
               </li>
               <li style={{ marginBottom: '8px' }}>
                 Mengisi Surat Kuasa (<a href="/format-surat-kuasa.pdf" target="_blank" rel="noreferrer" style={{ textDecoration: 'underline', color: 'var(--primary)', fontWeight: 'bold', cursor: 'pointer' }}>link format</a>)
@@ -152,35 +149,46 @@ const LandingPage: React.FC = () => {
               <li style={{ marginBottom: '8px' }}>Foto Copy Surat Nikah Para Ahli Waris(bila ada)</li>
               <li style={{ marginBottom: '8px' }}>Foto Copy Surat Kematian Ahli Waris (apabila Ahli Waris telah meninggal)</li>
               <li style={{ marginBottom: '8px' }}>Surat Pernyataan Belum Menikah dan/atau Tidak Memiliki Anak (bila pewaris belum menikah dan/atau tidak mempunyai anak)</li>
-              <li style={{ marginBottom: '8px' }}>Bila berkaitan dengan pendaftaran tanah di BPN, atau pembagian warisan, disarankan untuk mengajukan permohonan fatwa waris ke pengadilan agama setempat bagi yang beragama islam, atau ke pengadilan negeri setempat atau notaris</li>
-              <li style={{ marginBottom: '8px' }}>Berkas yang sudah lengkap selanjutnya akan diverifikasi oleh petugas, Pemohon bisa melihat status Pelayanan melalui Cek Status</li>
             </ol>
           </div>
 
-          <div style={{ 
-            borderTop: '1px solid #cbd5e1', 
-            paddingTop: '20px', 
-            fontSize: '0.95rem', 
-            color: 'var(--text-primary)', 
-            lineHeight: '1.6' 
+          <div style={{
+            borderTop: '2px solid var(--secondary)',
+            paddingTop: '20px',
+            fontSize: '0.95rem',
+            color: 'var(--text-primary)',
+            lineHeight: '1.6',
+            marginTop: '40px'
           }}>
-            <p style={{ margin: '0 0 10px 0', fontWeight: 'bold' }}>
-              Pengambilan Dokumen:
-            </p>
-            <p style={{ margin: '0 0 10px 0' }}>
-              Jika status permohonan telah ditandatangani Lurah, silakan mengambil dokumen fisik Surat Pernyataan Ahli Waris di:
-            </p>
-            <div style={{ 
-              paddingLeft: '14px', 
-              borderLeft: '4px solid var(--secondary)', 
-              margin: '12px 0',
-              fontWeight: '500'
-            }}>
-              Loket PTSP Kelurahan Gelora (Lantai 1)<br />
-              <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>
-                Jalan Gerbang Pemuda Nomor 1, RT.1/RW.3, Gelora, Kecamatan Tanah Abang, Kota Jakarta Pusat, DKI Jakarta 10270
-              </span>
-            </div>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '12px', marginTop: 0 }}>
+              Informasi Lain-Lain
+            </h3>
+
+            <ol style={{ paddingLeft: '20px', margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)', lineHeight: '1.7' }}>
+              <li style={{ marginBottom: '8px' }}>
+                Bila berkaitan dengan pendaftaran tanah di BPN, atau pembagian warisan, disarankan untuk mengajukan permohonan fatwa waris ke pengadilan agama setempat bagi yang beragama islam, atau ke pengadilan negeri setempat atau notaris.
+              </li>
+              <li style={{ marginBottom: '8px' }}>
+                Berkas yang sudah lengkap selanjutnya akan diverifikasi oleh petugas, Pemohon bisa melihat status Pelayanan melalui Cek Status.
+              </li>
+              <li>
+                <p style={{ margin: '0 0 10px 0' }}>
+                  Jika status permohonan telah ditandatangani Lurah, silakan mengambil dokumen fisik Surat Pernyataan Ahli Waris di:
+                </p>
+                <div style={{
+                  paddingLeft: '14px',
+                  borderLeft: '4px solid var(--secondary)',
+                  margin: '12px 0',
+                  fontWeight: '500'
+                }}>
+                  Loket PTSP Kelurahan Gelora (Lantai 1)<br />
+                  <span style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>
+                    Jalan Gerbang Pemuda Nomor 1, RT.1/RW.3, Gelora, Kecamatan Tanah Abang, Kota Jakarta Pusat, DKI Jakarta 10270
+                  </span>
+                </div>
+              </li>
+            </ol>
+
             <p style={{ margin: '12px 0 0 0', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
               📅 Buka setiap hari kerja (Senin-Jumat), pukul 07.30 s/d 16.00 WIB.<br />
               💰 Pelayanan ini <strong>tidak dipungut biaya (Gratis)</strong>.
