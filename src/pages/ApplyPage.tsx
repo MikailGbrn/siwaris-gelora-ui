@@ -351,23 +351,124 @@ const ApplyPage: React.FC = () => {
           </div>
 
           {showRelationshipDocs && (
-            <div className="form-group" style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginTop: '10px' }}>
-              <label htmlFor="is_divorced" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>Apakah Pewaris Bercerai?</label>
-              <select
-                id="is_divorced"
-                name="is_divorced"
-                className="form-control"
-                value={formData.is_divorced}
-                onChange={handleInputChange}
-              >
-                <option value="Tidak">Tidak Bercerai</option>
-                <option value="Ya">Bercerai (Cerai Hidup/Mati)</option>
-              </select>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginTop: '6px' }}>
-                * Jika bercerai, Anda wajib mengunggah Akta Cerai pada kolom unggah dokumen di bawah.
-              </span>
-            </div>
+            <>
+              <div className="form-group" style={{ backgroundColor: '#f8fafc', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', marginTop: '10px' }}>
+                <label htmlFor="is_divorced" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>Apakah Pewaris Bercerai?</label>
+                <select
+                  id="is_divorced"
+                  name="is_divorced"
+                  className="form-control"
+                  value={formData.is_divorced}
+                  onChange={handleInputChange}
+                >
+                  <option value="Tidak">Tidak Bercerai</option>
+                  <option value="Ya">Bercerai (Cerai Hidup/Mati)</option>
+                </select>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginTop: '6px' }}>
+                  * Jika bercerai, Anda wajib mengunggah Akta Cerai di bawah.
+                </span>
+              </div>
+
+              <div style={{ marginTop: '15px', backgroundColor: '#f0fdf4', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid #bbf7d0', marginBottom: '15px' }}>
+                <h4 style={{ color: 'var(--primary)', marginBottom: '15px', marginTop: 0 }}>
+                  Dokumen Khusus Pewaris (Hubungan: {formData.relationship})
+                </h4>
+
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label>Surat Nikah Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
+                  <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
+                    <input
+                      type="file"
+                      accept=".pdf,image/*"
+                      required={showRelationshipDocs}
+                      onChange={(e) => handleFileChange(e, 'file_surat_nikah_pewaris')}
+                    />
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      {files.file_surat_nikah_pewaris ? files.file_surat_nikah_pewaris.name : "Pilih berkas Surat Nikah Pewaris"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: '15px' }}>
+                  <label>Fotocopy KTP Suami <span style={{ color: 'var(--error)' }}>*</span></label>
+                  <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
+                    <input
+                      type="file"
+                      accept=".pdf,image/*"
+                      required={showRelationshipDocs}
+                      onChange={(e) => handleFileChange(e, 'file_ktp_suami')}
+                    />
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      {files.file_ktp_suami ? files.file_ktp_suami.name : "Pilih berkas KTP Suami"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: formData.is_divorced === 'Ya' ? '15px' : '0' }}>
+                  <label>Fotocopy KTP Istri <span style={{ color: 'var(--error)' }}>*</span></label>
+                  <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
+                    <input
+                      type="file"
+                      accept=".pdf,image/*"
+                      required={showRelationshipDocs}
+                      onChange={(e) => handleFileChange(e, 'file_ktp_istri')}
+                    />
+                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                      {files.file_ktp_istri ? files.file_ktp_istri.name : "Pilih berkas KTP Istri"}
+                    </span>
+                  </div>
+                </div>
+
+                {formData.is_divorced === 'Ya' && (
+                  <div className="form-group">
+                    <label>Fotocopy Akta Cerai Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
+                    <div className="file-input-wrapper" style={{ backgroundColor: '#fff', border: '1px solid var(--error)' }}>
+                      <input
+                        type="file"
+                        accept=".pdf,image/*"
+                        required={formData.is_divorced === 'Ya'}
+                        onChange={(e) => handleFileChange(e, 'file_akta_cerai_pewaris')}
+                      />
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        {files.file_akta_cerai_pewaris ? files.file_akta_cerai_pewaris.name : "Pilih berkas Akta Cerai Pewaris"}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
           )}
+
+          <div style={{ marginTop: '20px' }}>
+            <div className="form-group" style={{ marginBottom: '15px' }}>
+              <label>Fotocopy KTP Pewaris (Almarhum / Almarhumah) <span style={{ color: 'var(--error)' }}>*</span></label>
+              <div className="file-input-wrapper">
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
+                  onChange={(e) => handleFileChange(e, 'file_ktp_pewaris')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_ktp_pewaris ? files.file_ktp_pewaris.name : "Pilih berkas KTP Pewaris"}
+                </span>
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Surat Kematian Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
+              <div className="file-input-wrapper">
+                <input
+                  type="file"
+                  accept=".pdf,image/*"
+                  required
+                  onChange={(e) => handleFileChange(e, 'file_kematian_pewaris')}
+                />
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {files.file_kematian_pewaris ? files.file_kematian_pewaris.name : "Pilih berkas Surat Kematian Pewaris"}
+                </span>
+              </div>
+            </div>
+          </div>
 
           {/* Bagian 3: Upload Berkas */}
           <h3 style={{ borderBottom: '2px solid var(--primary-light)', paddingBottom: '8px', color: 'var(--primary)', marginBottom: '20px', marginTop: '40px' }}>
@@ -440,22 +541,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>5. Fotocopy KTP Pewaris (Almarhum / Almarhumah) <span style={{ color: 'var(--error)' }}>*</span></label>
-              <div className="file-input-wrapper">
-                <input
-                  type="file"
-                  accept=".pdf,image/*"
-                  required
-                  onChange={(e) => handleFileChange(e, 'file_ktp_pewaris')}
-                />
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                  {files.file_ktp_pewaris ? files.file_ktp_pewaris.name : "Pilih berkas KTP Pewaris"}
-                </span>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>6. Fotocopy KTP Terbaru Para Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
+              <label>5. Fotocopy KTP Terbaru Para Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
                 <input
                   type="file"
@@ -470,22 +556,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>7. Surat Kematian Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
-              <div className="file-input-wrapper">
-                <input
-                  type="file"
-                  accept=".pdf,image/*"
-                  required
-                  onChange={(e) => handleFileChange(e, 'file_kematian_pewaris')}
-                />
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                  {files.file_kematian_pewaris ? files.file_kematian_pewaris.name : "Pilih berkas Surat Kematian Pewaris"}
-                </span>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>8. Fotocopy KK Para Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
+              <label>6. Fotocopy KK Para Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
                 <input
                   type="file"
@@ -500,7 +571,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>9. Fotocopy Akta Kelahiran Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
+              <label>7. Fotocopy Akta Kelahiran Ahli Waris <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
                 <input
                   type="file"
@@ -515,7 +586,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>10. Fotocopy KTP 2 Orang Saksi <span style={{ color: 'var(--error)' }}>*</span></label>
+              <label>8. Fotocopy KTP 2 Orang Saksi <span style={{ color: 'var(--error)' }}>*</span></label>
               <div className="file-input-wrapper">
                 <input
                   type="file"
@@ -530,85 +601,14 @@ const ApplyPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Sub-bagian B: Dokumen Kondisional */}
-          {showRelationshipDocs && (
-            <div style={{ marginBottom: '20px', backgroundColor: '#f0fdf4', padding: '20px', borderRadius: 'var(--radius-md)', border: '1px solid #bbf7d0' }}>
-              <h4 style={{ color: 'var(--primary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                B. DOKUMEN KHUSUS (Hubungan: {formData.relationship})
-              </h4>
-
-              <div className="form-group">
-                <label>11. Surat Nikah Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
-                <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
-                  <input
-                    type="file"
-                    accept=".pdf,image/*"
-                    required={showRelationshipDocs}
-                    onChange={(e) => handleFileChange(e, 'file_surat_nikah_pewaris')}
-                  />
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {files.file_surat_nikah_pewaris ? files.file_surat_nikah_pewaris.name : "Pilih berkas Surat Nikah Pewaris"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>12. Fotocopy KTP Suami <span style={{ color: 'var(--error)' }}>*</span></label>
-                <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
-                  <input
-                    type="file"
-                    accept=".pdf,image/*"
-                    required={showRelationshipDocs}
-                    onChange={(e) => handleFileChange(e, 'file_ktp_suami')}
-                  />
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {files.file_ktp_suami ? files.file_ktp_suami.name : "Pilih berkas KTP Suami"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>13. Fotocopy KTP Istri <span style={{ color: 'var(--error)' }}>*</span></label>
-                <div className="file-input-wrapper" style={{ backgroundColor: '#fff' }}>
-                  <input
-                    type="file"
-                    accept=".pdf,image/*"
-                    required={showRelationshipDocs}
-                    onChange={(e) => handleFileChange(e, 'file_ktp_istri')}
-                  />
-                  <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {files.file_ktp_istri ? files.file_ktp_istri.name : "Pilih berkas KTP Istri"}
-                  </span>
-                </div>
-              </div>
-
-              {formData.is_divorced === 'Ya' && (
-                <div className="form-group">
-                  <label>14. Fotocopy Akta Cerai Pewaris <span style={{ color: 'var(--error)' }}>*</span></label>
-                  <div className="file-input-wrapper" style={{ backgroundColor: '#fff', border: '1px solid var(--error)' }}>
-                    <input
-                      type="file"
-                      accept=".pdf,image/*"
-                      required={formData.is_divorced === 'Ya'}
-                      onChange={(e) => handleFileChange(e, 'file_akta_cerai_pewaris')}
-                    />
-                    <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                      {files.file_akta_cerai_pewaris ? files.file_akta_cerai_pewaris.name : "Pilih berkas Akta Cerai Pewaris"}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Sub-bagian C: Dokumen Opsional */}
+          {/* Sub-bagian B: Dokumen Opsional */}
           <div style={{ marginBottom: '20px' }}>
             <h4 style={{ color: 'var(--text-secondary)', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              C. DOKUMEN TAMBAHAN (Opsional / Jika Ada)
+              B. DOKUMEN TAMBAHAN (Opsional / Jika Ada)
             </h4>
 
             <div className="form-group">
-              <label>15. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
+              <label>9. Fotocopy Surat/Akta Kematian Ahli Waris yang Wafat Lebih Dulu</label>
               <div className="file-input-wrapper">
                 <input
                   type="file"
@@ -622,7 +622,7 @@ const ApplyPage: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>16. Dokumen Pendukung Lainnya</label>
+              <label>10. Dokumen Pendukung Lainnya</label>
               <div className="file-input-wrapper">
                 <input
                   type="file"
