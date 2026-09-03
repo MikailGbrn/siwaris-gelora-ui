@@ -34,6 +34,14 @@ const Navigation: React.FC = () => {
             <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Beranda</Link>
             <Link to="/apply" className={`nav-link ${location.pathname === '/apply' ? 'active' : ''}`}>Daftar Online</Link>
             <Link to="/track" className={`nav-link ${location.pathname === '/track' ? 'active' : ''}`}>Cek Status</Link>
+            <a 
+              href="https://wa.me/6281585015100" 
+              target="_blank" 
+              rel="noreferrer" 
+              className="nav-link"
+            >
+              Kontak Kami
+            </a>
           </div>
         )}
 
