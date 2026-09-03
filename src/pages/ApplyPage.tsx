@@ -42,8 +42,97 @@ const ApplyPage: React.FC = () => {
     file_akta_cerai_pewaris: null
   });
 
+  // OTP Verification States
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpCode, setOtpCode] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [otpSending, setOtpSending] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [otpMessage, setOtpMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [otpCountdown, setOtpCountdown] = useState(0);
+
+  const startCountdown = (seconds: number = 60) => {
+    setOtpCountdown(seconds);
+    const interval = setInterval(() => {
+      setOtpCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleSendOTP = async () => {
+    if (!formData.applicant_email || !formData.applicant_email.includes('@')) {
+      setOtpMessage({ type: 'error', text: 'Masukkan alamat email yang valid terlebih dahulu.' });
+      return;
+    }
+
+    setOtpSending(true);
+    setOtpMessage(null);
+
+    try {
+      const res = await fetch(`${API_URL}/api/otp/send`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.applicant_email })
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Gagal mengirimkan kode OTP.');
+      }
+
+      setOtpSent(true);
+      setOtpMessage({ type: 'success', text: 'Kode OTP 6-digit telah dikirim ke email Anda. Silakan periksa inbox / folder Spam.' });
+      startCountdown(60);
+    } catch (err: any) {
+      setOtpMessage({ type: 'error', text: err.message || 'Gagal mengirim kode OTP. Coba lagi.' });
+    } finally {
+      setOtpSending(false);
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    if (!otpCode || otpCode.trim().length !== 6) {
+      setOtpMessage({ type: 'error', text: 'Masukkan 6-digit kode OTP.' });
+      return;
+    }
+
+    setOtpVerifying(true);
+    setOtpMessage(null);
+
+    try {
+      const res = await fetch(`${API_URL}/api/otp/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.applicant_email, code: otpCode.trim() })
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Kode OTP salah atau kedaluwarsa.');
+      }
+
+      setIsEmailVerified(true);
+      setOtpMessage({ type: 'success', text: 'Email berhasil diverifikasi! ✓' });
+    } catch (err: any) {
+      setOtpMessage({ type: 'error', text: err.message || 'Verifikasi OTP gagal.' });
+    } finally {
+      setOtpVerifying(false);
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
+    if (name === 'applicant_email') {
+      setIsEmailVerified(false);
+      setOtpSent(false);
+      setOtpCode('');
+      setOtpMessage(null);
+    }
     if (type === 'checkbox') {
       const checked = (e.target as HTMLInputElement).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
@@ -67,6 +156,14 @@ const ApplyPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!isEmailVerified) {
+      const msg = 'Silakan verifikasi alamat email Anda menggunakan kode OTP terlebih dahulu.';
+      alert(msg);
+      setError(msg);
+      window.scrollTo({ top: 250, behavior: 'smooth' });
+      return;
+    }
 
     if (!formData.agreement) {
       alert('Anda harus menyetujui pernyataan kebenaran data.');
@@ -284,17 +381,85 @@ const ApplyPage: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="applicant_email">Alamat Email</label>
-              <input
-                type="email"
-                id="applicant_email"
-                name="applicant_email"
-                className="form-control"
-                required
-                value={formData.applicant_email}
-                onChange={handleInputChange}
-                placeholder="Contoh: nama@domain.com"
-              />
+              <label htmlFor="applicant_email">
+                Alamat Email <span style={{ color: 'var(--error)' }}>*</span>
+              </label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  type="email"
+                  id="applicant_email"
+                  name="applicant_email"
+                  className="form-control"
+                  required
+                  disabled={isEmailVerified}
+                  value={formData.applicant_email}
+                  onChange={handleInputChange}
+                  placeholder="Contoh: nama@domain.com"
+                />
+                {!isEmailVerified && (
+                  <button
+                    type="button"
+                    className="btn btn-outline"
+                    onClick={handleSendOTP}
+                    disabled={otpSending || otpCountdown > 0 || !formData.applicant_email}
+                    style={{ whiteSpace: 'nowrap', minWidth: '130px', fontSize: '0.85rem' }}
+                  >
+                    {otpSending ? <Loader2 size={16} className="spin" /> : otpCountdown > 0 ? `Kirim Ulang (${otpCountdown}s)` : otpSent ? 'Kirim Ulang OTP' : 'Kirim Kode OTP'}
+                  </button>
+                )}
+              </div>
+
+              {isEmailVerified && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '8px', color: '#166534', fontWeight: 'bold', fontSize: '0.88rem' }}>
+                  <CheckCircle2 size={18} color="#166534" /> Email Terverifikasi
+                  <button
+                    type="button"
+                    onClick={() => setIsEmailVerified(false)}
+                    style={{ background: 'none', border: 'none', color: '#0284c7', cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline', marginLeft: '10px' }}
+                  >
+                    Ubah Email
+                  </button>
+                </div>
+              )}
+
+              {otpSent && !isEmailVerified && (
+                <div style={{ marginTop: '12px', background: '#f0f9ff', padding: '12px 16px', borderRadius: '6px', border: '1px solid #bae6fd' }}>
+                  <label style={{ fontSize: '0.85rem', fontWeight: '600', color: '#0369a1', display: 'block', marginBottom: '6px' }}>
+                    Masukkan Kode OTP 6-Digit dari Email Anda
+                  </label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      className="form-control"
+                      value={otpCode}
+                      onChange={(e) => setOtpCode(e.target.value)}
+                      placeholder="Contoh: 123456"
+                      style={{ letterSpacing: '4px', fontWeight: 'bold', width: '150px' }}
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={handleVerifyOTP}
+                      disabled={otpVerifying || otpCode.trim().length !== 6}
+                      style={{ fontSize: '0.85rem' }}
+                    >
+                      {otpVerifying ? <Loader2 size={16} className="spin" /> : 'Verifikasi OTP'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {otpMessage && (
+                <div style={{
+                  marginTop: '8px',
+                  fontSize: '0.85rem',
+                  color: otpMessage.type === 'success' ? '#15803d' : '#b91c1c',
+                  fontWeight: '500'
+                }}>
+                  {otpMessage.text}
+                </div>
+              )}
             </div>
           </div>
 
