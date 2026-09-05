@@ -76,43 +76,63 @@ const TrackPage: React.FC = () => {
     }
   };
 
+  const normalizeStatus = (status: string = '') => {
+    return status.trim().toLowerCase();
+  };
+
   const getStatusBadgeClass = (status: string) => {
-    switch (status) {
-      case 'Menunggu Verifikasi': return 'badge-pending';
-      case 'Sedang Diproses': return 'badge-processing';
-      case 'Perlu Perbaikan': return 'badge-revision';
-      case 'Draft Sudah Terbuat':
-      case 'Menunggu TTD': return 'badge-ttd';
-      case 'Disetujui':
-      case 'Selesai': return 'badge-success';
-      default: return '';
-    }
+    const s = normalizeStatus(status);
+    if (s.includes('verifikasi')) return 'badge-pending';
+    if (s.includes('perbaikan') || s.includes('revisi')) return 'badge-revision';
+    if (s.includes('diproses')) return 'badge-processing';
+    if (s.includes('draft') || s.includes('ttd')) return 'badge-ttd';
+    if (s.includes('selesai') || s.includes('disetujui')) return 'badge-success';
+    return 'badge-pending';
   };
 
   const getStatusPercentage = (status: string) => {
-    switch (status) {
-      case 'Menunggu Verifikasi': return 20;
-      case 'Perlu Perbaikan': return 35;
-      case 'Sedang Diproses': return 60;
-      case 'Draft Sudah Terbuat':
-      case 'Menunggu TTD': return 85;
-      case 'Disetujui':
-      case 'Selesai': return 100;
-      default: return 0;
-    }
+    const s = normalizeStatus(status);
+    if (s.includes('verifikasi')) return 20;
+    if (s.includes('perbaikan') || s.includes('revisi')) return 35;
+    if (s.includes('diproses')) return 60;
+    if (s.includes('draft') || s.includes('ttd')) return 85;
+    if (s.includes('selesai') || s.includes('disetujui')) return 100;
+    return 20;
   };
 
   const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'Menunggu Verifikasi': return <Clock size={24} style={{ color: '#d97706' }} />;
-      case 'Perlu Perbaikan': return <AlertTriangle size={24} style={{ color: 'var(--error)' }} />;
-      case 'Sedang Diproses': return <Clock size={24} style={{ color: '#1e40af' }} />;
-      case 'Draft Sudah Terbuat':
-      case 'Menunggu TTD': return <Award size={24} style={{ color: '#0284c7' }} />;
-      case 'Disetujui':
-      case 'Selesai': return <CheckCircle2 size={24} style={{ color: 'var(--success)' }} />;
-      default: return null;
-    }
+    const s = normalizeStatus(status);
+    if (s.includes('verifikasi')) return <Clock size={24} style={{ color: '#d97706' }} />;
+    if (s.includes('perbaikan') || s.includes('revisi')) return <AlertTriangle size={24} style={{ color: 'var(--error)' }} />;
+    if (s.includes('diproses')) return <Clock size={24} style={{ color: '#1e40af' }} />;
+    if (s.includes('draft') || s.includes('ttd')) return <Award size={24} style={{ color: '#0284c7' }} />;
+    if (s.includes('selesai') || s.includes('disetujui')) return <CheckCircle2 size={24} style={{ color: 'var(--success)' }} />;
+    return <Clock size={24} style={{ color: '#d97706' }} />;
+  };
+
+  const isSelesai = (status: string) => {
+    const s = normalizeStatus(status);
+    return s.includes('selesai') || s.includes('disetujui');
+  };
+
+  const isPerbaikan = (status: string) => {
+    const s = normalizeStatus(status);
+    return s.includes('perbaikan') || s.includes('revisi');
+  };
+
+  const isVerifikasi = (status: string) => {
+    const s = normalizeStatus(status);
+    return s.includes('verifikasi');
+  };
+
+  const isDiproses = (status: string) => {
+    const s = normalizeStatus(status);
+    return s.includes('diproses');
+  };
+
+  const isDraft = (status: string) => {
+    const s = normalizeStatus(status);
+    return s.includes('draft') || s.includes('ttd');
   };
 
   // Human-readable labels for files
@@ -290,7 +310,7 @@ const TrackPage: React.FC = () => {
                   <div style={{ 
                     width: `${getStatusPercentage(result.status)}%`, 
                     height: '100%', 
-                    backgroundColor: result.status === 'Perlu Perbaikan' ? 'var(--error)' : 'var(--secondary)', 
+                    backgroundColor: isPerbaikan(result.status) ? 'var(--error)' : 'var(--secondary)', 
                     transition: 'width 0.4s ease' 
                   }} />
                 </div>
@@ -300,8 +320,8 @@ const TrackPage: React.FC = () => {
               <div style={{ 
                 display: 'flex', 
                 gap: '12px', 
-                backgroundColor: result.status === 'Selesai' ? '#f0fdf4' : result.status === 'Perlu Perbaikan' ? '#fdf2f2' : '#f8fafc',
-                border: `1px solid ${result.status === 'Selesai' ? '#bbf7d0' : result.status === 'Perlu Perbaikan' ? '#fecaca' : 'var(--border)'}`,
+                backgroundColor: isSelesai(result.status) ? '#f0fdf4' : isPerbaikan(result.status) ? '#fdf2f2' : '#f8fafc',
+                border: `1px solid ${isSelesai(result.status) ? '#bbf7d0' : isPerbaikan(result.status) ? '#fecaca' : 'var(--border)'}`,
                 padding: '20px', 
                 borderRadius: 'var(--radius-md)', 
                 marginBottom: '30px' 
@@ -310,23 +330,23 @@ const TrackPage: React.FC = () => {
                   {getStatusIcon(result.status)}
                 </div>
                 <div>
-                  <h4 style={{ margin: '0 0 6px 0', color: (result.status === 'Selesai' || result.status === 'Disetujui') ? '#166534' : result.status === 'Perlu Perbaikan' ? '#991b1b' : 'var(--text-primary)' }}>
-                    {(result.status === 'Selesai' || result.status === 'Disetujui') && 'Surat Siap Diambil!'}
-                    {result.status === 'Perlu Perbaikan' && 'Terdapat Perbaikan Berkas'}
-                    {result.status === 'Menunggu Verifikasi' && 'Berkas Sedang Diverifikasi'}
-                    {result.status === 'Sedang Diproses' && 'Berkas Sedang Diproses'}
-                    {(result.status === 'Draft Sudah Terbuat' || result.status === 'Menunggu TTD') && 'Draft Surat Sudah Terbuat'}
+                  <h4 style={{ margin: '0 0 6px 0', color: isSelesai(result.status) ? '#166534' : isPerbaikan(result.status) ? '#991b1b' : 'var(--text-primary)' }}>
+                    {isSelesai(result.status) && 'Surat Siap Diambil!'}
+                    {isPerbaikan(result.status) && 'Terdapat Perbaikan Berkas'}
+                    {isVerifikasi(result.status) && 'Berkas Sedang Diverifikasi'}
+                    {isDiproses(result.status) && 'Berkas Sedang Diproses'}
+                    {isDraft(result.status) && 'Draft Surat Sudah Terbuat'}
                   </h4>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-                    {(result.status === 'Selesai' || result.status === 'Disetujui') && (
+                    {isSelesai(result.status) && (
                       <>Silakan datang ke <strong>Kantor Kelurahan Gelora</strong> untuk mengambil dokumen fisik asli. Jangan lupa membawa dokumen persyaratan asli Anda untuk verifikasi akhir.</>
                     )}
-                    {result.status === 'Perlu Perbaikan' && (
+                    {isPerbaikan(result.status) && (
                       <>Mohon perbaiki berkas yang ditandai di bawah. Catatan petugas: <strong>{result.admin_notes || 'Silakan unggah berkas yang benar.'}</strong></>
                     )}
-                    {result.status === 'Menunggu Verifikasi' && 'Petugas loket sedang memeriksa kelengkapan berkas fisik yang Anda unggah. Mohon tunggu informasi selanjutnya.'}
-                    {result.status === 'Sedang Diproses' && 'Berkas Anda sedang dalam proses penyusunan draf surat ahli waris.'}
-                    {(result.status === 'Draft Sudah Terbuat' || result.status === 'Menunggu TTD') && 'Draft Surat Pernyataan Ahli Waris Anda telah selesai dibuat dan dikirimkan ke email Anda. Silakan periksa inbox email Anda untuk mengunduh dan memeriksa berkas draft tersebut.'}
+                    {isVerifikasi(result.status) && 'Petugas loket sedang memeriksa kelengkapan berkas fisik yang Anda unggah. Mohon tunggu informasi selanjutnya.'}
+                    {isDiproses(result.status) && 'Berkas Anda sedang dalam proses penyusunan draf surat ahli waris.'}
+                    {isDraft(result.status) && 'Draft Surat Pernyataan Ahli Waris Anda telah selesai dibuat dan dikirimkan ke email Anda. Silakan periksa inbox email Anda untuk mengunduh dan memeriksa berkas draft tersebut.'}
                   </p>
                 </div>
               </div>
@@ -348,7 +368,7 @@ const TrackPage: React.FC = () => {
             </div>
 
             {/* Dynamic Revision Form */}
-            {result.status === 'Perlu Perbaikan' && rejectedKeys.length > 0 && (
+            {isPerbaikan(result.status) && rejectedKeys.length > 0 && (
               <div className="card" style={{ padding: '30px', border: '1px solid var(--error)', backgroundColor: '#fff8f8' }}>
                 <h3 style={{ color: 'var(--error)', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <AlertTriangle size={20} /> Unggah Ulang Berkas Perbaikan
