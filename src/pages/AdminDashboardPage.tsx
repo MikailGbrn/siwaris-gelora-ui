@@ -253,7 +253,7 @@ const AdminDashboardPage: React.FC = () => {
   return (
     <div className="container" style={{ paddingBottom: '60px' }}>
       {/* Header Admin */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px', borderBottom: '2px solid var(--border)', paddingBottom: '15px' }}>
+      <div className="admin-header-flex">
         <div>
           <h2 style={{ margin: 0, color: 'var(--primary)' }}>Dashboard Petugas Kelurahan</h2>
           <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Kelola berkas permohonan ahli waris warga</p>
@@ -313,18 +313,18 @@ const AdminDashboardPage: React.FC = () => {
       </div>
 
       {/* Main Panel */}
-      <div style={{ display: 'grid', gridTemplateColumns: selectedApp ? '3fr 2fr' : '1fr', gap: '30px', transition: 'all 0.3s ease' }}>
+      <div className={`admin-main-grid ${selectedApp ? 'has-selected' : ''}`}>
         
         {/* Table/Data Sheet List */}
         <div>
           <div className="card" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', gap: '15px', marginBottom: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="admin-filter-bar">
               {/* Search */}
-              <div style={{ position: 'relative', flex: '1', minWidth: '200px' }}>
+              <div className="admin-search-wrapper">
                 <input 
                   type="text" 
                   className="form-control" 
-                  style={{ paddingLeft: '35px' }}
+                  style={{ paddingLeft: '35px', width: '100%' }}
                   placeholder="Cari nama, NIK, atau nomor registrasi..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -333,7 +333,7 @@ const AdminDashboardPage: React.FC = () => {
               </div>
               
               {/* Status Filter */}
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <div className="admin-status-chips">
                 {['Semua', 'Menunggu Verifikasi', 'Sedang Diproses', 'Perlu Perbaikan', 'Draft Sudah Terbuat', 'Selesai'].map((status) => (
                   <button
                     key={status}
@@ -353,7 +353,8 @@ const AdminDashboardPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="table-wrapper">
+            {/* Desktop Table View */}
+            <div className="table-wrapper desktop-table-view">
               <table>
                 <thead>
                   <tr>
@@ -395,6 +396,52 @@ const AdminDashboardPage: React.FC = () => {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View (renders on mobile screens) */}
+            <div className="mobile-cards-view">
+              {filteredApps.length === 0 ? (
+                <div style={{ textAlign: 'center', color: 'var(--text-secondary)', padding: '25px', background: '#f8fafc', borderRadius: '8px' }}>
+                  Tidak ada data permohonan ditemukan.
+                </div>
+              ) : (
+                filteredApps.map((app) => (
+                  <div
+                    key={app.id}
+                    style={{
+                      background: selectedApp?.id === app.id ? '#f0fdf4' : '#ffffff',
+                      border: selectedApp?.id === app.id ? '2px solid var(--primary)' : '1px solid var(--border)',
+                      borderRadius: '8px',
+                      padding: '14px',
+                      marginBottom: '10px',
+                      boxShadow: 'var(--shadow-sm)',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => handleSelectApp(app)}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '0.95rem', color: 'var(--primary)' }}>{app.registration_number}</span>
+                      <span className={`badge ${getStatusBadgeClass(app.status)}`}>{app.status}</span>
+                    </div>
+                    <div style={{ fontSize: '0.88rem', color: 'var(--text-primary)', marginBottom: '4px' }}>
+                      <strong>Pemohon:</strong> {app.applicant_name}
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '12px' }}>
+                      <strong>Pewaris:</strong> {app.heir_name} ({app.relationship})
+                    </div>
+                    <button
+                      className="btn btn-secondary"
+                      style={{ width: '100%', padding: '8px', fontSize: '0.85rem', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '6px' }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectApp(app);
+                      }}
+                    >
+                      <Eye size={16} /> Lihat Detail & Update Status
+                    </button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>

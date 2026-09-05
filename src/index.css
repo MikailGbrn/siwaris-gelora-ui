@@ -290,15 +290,35 @@ a:hover {
   align-items: center;
   gap: 12px;
   border: 2px dashed var(--border);
-  padding: 20px;
+  padding: 16px;
   border-radius: var(--radius-md);
   background-color: #fafbfc;
   transition: all 0.2s;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.file-input-wrapper input[type="file"] {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .file-input-wrapper:hover {
   border-color: var(--primary);
   background-color: var(--primary-light);
+}
+
+@media (max-width: 768px) {
+  .file-input-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 12px;
+    gap: 8px;
+  }
+  .file-input-wrapper input[type="file"] {
+    width: 100%;
+  }
 }
 
 /* Timeline/Infographic */
@@ -436,15 +456,20 @@ a:hover {
 /* Tables */
 .table-wrapper {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: var(--white);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
   margin-top: 20px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 table {
   width: 100%;
+  min-width: 540px;
   border-collapse: collapse;
   text-align: left;
 }
@@ -500,8 +525,202 @@ tr:hover td {
   margin: 0;
 }
 
-.stat-label {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin: 0;
+/* Admin Dashboard Responsive Layout */
+.admin-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 15px;
+}
+
+.admin-main-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+}
+
+.admin-filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.admin-search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.admin-status-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+@media (min-width: 993px) {
+  .admin-main-grid.has-selected {
+    grid-template-columns: 3fr 2fr;
+  }
+  .admin-filter-bar {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .admin-header-flex button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Admin Table vs Mobile Card View Switcher */
+.mobile-cards-view {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-table-view {
+    display: none !important;
+  }
+  .mobile-cards-view {
+    display: block !important;
+    margin-top: 15px;
+  }
+}
+
+/* ==========================================================================
+   Mobile & Tablet Responsiveness Enhancements
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+  /* Prevent iOS Safari input zoom on focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  .container {
+    padding: 0 16px;
+  }
+
+  /* Header & Navigation Mobile Layout */
+  .nav-container {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 0;
+    gap: 10px;
+  }
+
+  .logo-section img {
+    height: 36px;
+  }
+
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .logo-subtext {
+    font-size: 0.7rem;
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+
+  /* Hero Section */
+  .hero {
+    padding: 35px 16px;
+    border-radius: 0 0 16px 16px;
+    margin-bottom: 25px;
+  }
+
+  .hero h1 {
+    font-size: 1.65rem;
+    line-height: 1.3;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+  }
+
+  /* Cards & Sections */
+  .card {
+    padding: 20px 16px !important;
+  }
+
+  /* Buttons on Mobile */
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  /* Form Rows */
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 14px 12px;
+    gap: 10px;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .stat-number {
+    font-size: 1.35rem;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+  }
+
+  /* Tables */
+  .table-wrapper {
+    margin-top: 15px;
+    border-radius: var(--radius-md);
+  }
+
+  th, td {
+    padding: 12px 10px;
+    font-size: 0.85rem;
+  }
 }
