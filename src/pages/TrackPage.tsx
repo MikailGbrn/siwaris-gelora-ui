@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ChevronLeft, Clock, AlertTriangle, CheckCircle2, Award, Loader2, Send } from 'lucide-react';
+import { Search, ChevronLeft, Clock, AlertTriangle, CheckCircle2, Award, Loader2, Send, FileText } from 'lucide-react';
 import { API_URL } from '../config';
 
 interface ApplicationData {
@@ -34,6 +34,7 @@ interface ApplicationData {
   file_ktp_istri: string;
   file_akta_cerai_pewaris: string;
   file_surat_kuasa: string;
+  file_draft?: string;
   rejected_files: string;
   admin_notes: string;
   estimated_completion: string;
@@ -346,8 +347,21 @@ const TrackPage: React.FC = () => {
                     )}
                     {isVerifikasi(result.status) && 'Petugas loket sedang memeriksa kelengkapan berkas fisik yang Anda unggah. Mohon tunggu informasi selanjutnya.'}
                     {isDiproses(result.status) && 'Berkas Anda sedang dalam proses penyusunan draf surat ahli waris.'}
-                    {isDraft(result.status) && 'Draft Surat Pernyataan Ahli Waris Anda telah selesai dibuat dan dikirimkan ke email Anda. Silakan periksa inbox email Anda untuk mengunduh dan memeriksa berkas draft tersebut.'}
+                    {isDraft(result.status) && 'Draft Surat Pernyataan Ahli Waris Anda telah selesai dibuat. Anda dapat memeriksa email Anda atau mengunduh draf surat secara langsung di bawah ini.'}
                   </p>
+                  {result.file_draft && (
+                    <div style={{ marginTop: '12px' }}>
+                      <a 
+                        href={`${API_URL}/${result.file_draft}`} 
+                        target="_blank" 
+                        rel="noreferrer"
+                        className="btn btn-primary"
+                        style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.88rem', padding: '8px 16px', borderRadius: 'var(--radius-sm)' }}
+                      >
+                        <FileText size={16} /> Unduh / Lihat Draft Surat
+                      </a>
+                    </div>
+                  )}
                 </div>
               </div>
 
