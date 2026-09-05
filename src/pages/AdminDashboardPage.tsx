@@ -57,6 +57,7 @@ const AdminDashboardPage: React.FC = () => {
   const [editNotes, setEditNotes] = useState('');
   const [saving, setSaving] = useState(false);
   const [rejectedFiles, setRejectedFiles] = useState<string[]>([]);
+  const [draftFile, setDraftFile] = useState<File | null>(null);
 
   const navigate = useNavigate();
   const token = localStorage.getItem('admin_token');
@@ -140,21 +141,44 @@ const AdminDashboardPage: React.FC = () => {
       return;
     }
 
+    if (editStatus === 'Draft Sudah Terbuat' && !draftFile) {
+      alert('Silakan unggah berkas draft (PDF / DOC) terlebih dahulu untuk mengubah status menjadi Draft Sudah Terbuat.');
+      return;
+    }
+
     setSaving(true);
     try {
-      const response = await fetch(`${API_URL}/api/admin/applications/${selectedApp.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          status: editStatus,
-          admin_notes: editNotes,
-          estimated_completion: '',
-          rejected_files: editStatus === 'Perlu Perbaikan' ? JSON.stringify(rejectedFiles) : '[]'
-        })
-      });
+      let response: Response;
+      if (draftFile) {
+        const formData = new FormData();
+        formData.append('status', editStatus);
+        formData.append('admin_notes', editNotes);
+        formData.append('estimated_completion', '');
+        formData.append('rejected_files', editStatus === 'Perlu Perbaikan' ? JSON.stringify(rejectedFiles) : '[]');
+        formData.append('file_draft', draftFile);
+
+        response = await fetch(`${API_URL}/api/admin/applications/${selectedApp.id}`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+      } else {
+        response = await fetch(`${API_URL}/api/admin/applications/${selectedApp.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            status: editStatus,
+            admin_notes: editNotes,
+            estimated_completion: '',
+            rejected_files: editStatus === 'Perlu Perbaikan' ? JSON.stringify(rejectedFiles) : '[]'
+          })
+        });
+      }
 
       if (!response.ok) {
         throw new Error('Gagal memperbarui status.');
@@ -200,16 +224,18 @@ const AdminDashboardPage: React.FC = () => {
   // Stats Calculations
   const totalSubmissions = applications.length;
   const pendingCount = applications.filter(a => a.status === 'Menunggu Verifikasi').length;
-  const processingCount = applications.filter(a => a.status === 'Sedang Diproses' || a.status === 'Menunggu TTD').length;
+  const processingCount = applications.filter(a => a.status === 'Sedang Diproses' || a.status === 'Draft Sudah Terbuat' || a.status === 'Menunggu TTD').length;
   const revisionCount = applications.filter(a => a.status === 'Perlu Perbaikan').length;
-  const doneCount = applications.filter(a => a.status === 'Selesai').length;
+  const doneCount = applications.filter(a => a.status === 'Selesai' || a.status === 'Disetujui').length;
 
   const getStatusBadgeClass = (status: string) => {
     switch (status) {
       case 'Menunggu Verifikasi': return 'badge-pending';
       case 'Sedang Diproses': return 'badge-processing';
       case 'Perlu Perbaikan': return 'badge-revision';
+      case 'Draft Sudah Terbuat':
       case 'Menunggu TTD': return 'badge-ttd';
+      case 'Disetujui':
       case 'Selesai': return 'badge-success';
       default: return '';
     }
@@ -229,7 +255,7 @@ const AdminDashboardPage: React.FC = () => {
       {/* Header Admin */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px', borderBottom: '2px solid var(--border)', paddingBottom: '15px' }}>
         <div>
-          <h2 style={{ margin: 0, color: 'var(--primary)' }}>Dashboard Petugan Kelurahan</h2>
+          <h2 style={{ margin: 0, color: 'var(--primary)' }}>Dashboard Petugas Kelurahan</h2>
           <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Kelola berkas permohonan ahli waris warga</p>
         </div>
         <button onClick={handleLogout} className="btn btn-outline" style={{ display: 'inline-flex', gap: '8px', color: 'var(--error)', borderColor: 'var(--error)' }}>
@@ -308,7 +334,7 @@ const AdminDashboardPage: React.FC = () => {
               
               {/* Status Filter */}
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {['Semua', 'Menunggu Verifikasi', 'Sedang Diproses', 'Perlu Perbaikan', 'Menunggu TTD', 'Selesai'].map((status) => (
+                {['Semua', 'Menunggu Verifikasi', 'Sedang Diproses', 'Perlu Perbaikan', 'Draft Sudah Terbuat', 'Selesai'].map((status) => (
                   <button
                     key={status}
                     onClick={() => setStatusFilter(status)}
@@ -497,10 +523,33 @@ const AdminDashboardPage: React.FC = () => {
                     <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
                     <option value="Perlu Perbaikan">Perlu Perbaikan</option>
                     <option value="Sedang Diproses">Sedang Diproses</option>
-                    <option value="Menunggu TTD">Menunggu TTD</option>
+                    <option value="Draft Sudah Terbuat">Draft Sudah Terbuat</option>
                     <option value="Selesai">Selesai</option>
                   </select>
                 </div>
+
+                {editStatus === 'Draft Sudah Terbuat' && (
+                  <div className="form-group" style={{ backgroundColor: '#f0f9ff', padding: '15px', borderRadius: '6px', border: '1px solid #bae6fd', marginBottom: '15px' }}>
+                    <label htmlFor="draftFileUpload" style={{ fontWeight: 'bold', color: '#0369a1', display: 'block', marginBottom: '6px' }}>
+                      Unggah Berkas Draft (PDF / DOC) <span style={{ color: 'var(--error)' }}>*</span>
+                    </label>
+                    <input 
+                      type="file" 
+                      id="draftFileUpload"
+                      accept=".pdf,.doc,.docx"
+                      className="form-control"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          setDraftFile(e.target.files[0]);
+                        }
+                      }}
+                      required
+                    />
+                    <small style={{ color: '#64748b', display: 'block', marginTop: '6px', fontSize: '0.82rem' }}>
+                      📎 Berkas draft ini akan otomatis dilampirkan ke email notifikasi pemohon saat Anda menyimpan perubahan.
+                    </small>
+                  </div>
+                )}
 
                 <div className="form-group">
                   <label htmlFor="editNotes">Catatan / Keterangan Tambahan</label>

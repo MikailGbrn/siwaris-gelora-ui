@@ -81,7 +81,9 @@ const TrackPage: React.FC = () => {
       case 'Menunggu Verifikasi': return 'badge-pending';
       case 'Sedang Diproses': return 'badge-processing';
       case 'Perlu Perbaikan': return 'badge-revision';
+      case 'Draft Sudah Terbuat':
       case 'Menunggu TTD': return 'badge-ttd';
+      case 'Disetujui':
       case 'Selesai': return 'badge-success';
       default: return '';
     }
@@ -92,7 +94,9 @@ const TrackPage: React.FC = () => {
       case 'Menunggu Verifikasi': return 20;
       case 'Perlu Perbaikan': return 35;
       case 'Sedang Diproses': return 60;
+      case 'Draft Sudah Terbuat':
       case 'Menunggu TTD': return 85;
+      case 'Disetujui':
       case 'Selesai': return 100;
       default: return 0;
     }
@@ -103,7 +107,9 @@ const TrackPage: React.FC = () => {
       case 'Menunggu Verifikasi': return <Clock size={24} style={{ color: '#d97706' }} />;
       case 'Perlu Perbaikan': return <AlertTriangle size={24} style={{ color: 'var(--error)' }} />;
       case 'Sedang Diproses': return <Clock size={24} style={{ color: '#1e40af' }} />;
-      case 'Menunggu TTD': return <Award size={24} style={{ color: '#6b21a8' }} />;
+      case 'Draft Sudah Terbuat':
+      case 'Menunggu TTD': return <Award size={24} style={{ color: '#0284c7' }} />;
+      case 'Disetujui':
       case 'Selesai': return <CheckCircle2 size={24} style={{ color: 'var(--success)' }} />;
       default: return null;
     }
@@ -304,15 +310,15 @@ const TrackPage: React.FC = () => {
                   {getStatusIcon(result.status)}
                 </div>
                 <div>
-                  <h4 style={{ margin: '0 0 6px 0', color: result.status === 'Selesai' ? '#166534' : result.status === 'Perlu Perbaikan' ? '#991b1b' : 'var(--text-primary)' }}>
-                    {result.status === 'Selesai' && 'Surat Siap Diambil!'}
+                  <h4 style={{ margin: '0 0 6px 0', color: (result.status === 'Selesai' || result.status === 'Disetujui') ? '#166534' : result.status === 'Perlu Perbaikan' ? '#991b1b' : 'var(--text-primary)' }}>
+                    {(result.status === 'Selesai' || result.status === 'Disetujui') && 'Surat Siap Diambil!'}
                     {result.status === 'Perlu Perbaikan' && 'Terdapat Perbaikan Berkas'}
                     {result.status === 'Menunggu Verifikasi' && 'Berkas Sedang Diverifikasi'}
                     {result.status === 'Sedang Diproses' && 'Berkas Sedang Diproses'}
-                    {result.status === 'Menunggu TTD' && 'Menunggu Tanda Tangan Lurah'}
+                    {(result.status === 'Draft Sudah Terbuat' || result.status === 'Menunggu TTD') && 'Draft Surat Sudah Terbuat'}
                   </h4>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-                    {result.status === 'Selesai' && (
+                    {(result.status === 'Selesai' || result.status === 'Disetujui') && (
                       <>Silakan datang ke <strong>Kantor Kelurahan Gelora</strong> untuk mengambil dokumen fisik asli. Jangan lupa membawa dokumen persyaratan asli Anda untuk verifikasi akhir.</>
                     )}
                     {result.status === 'Perlu Perbaikan' && (
@@ -320,7 +326,7 @@ const TrackPage: React.FC = () => {
                     )}
                     {result.status === 'Menunggu Verifikasi' && 'Petugas loket sedang memeriksa kelengkapan berkas fisik yang Anda unggah. Mohon tunggu informasi selanjutnya.'}
                     {result.status === 'Sedang Diproses' && 'Berkas Anda sedang dalam proses penyusunan draf surat ahli waris.'}
-                    {result.status === 'Menunggu TTD' && 'Draf surat sudah rampung dan saat ini sedang menunggu tanda tangan basah/elektronik dari Lurah.'}
+                    {(result.status === 'Draft Sudah Terbuat' || result.status === 'Menunggu TTD') && 'Draft Surat Pernyataan Ahli Waris Anda telah selesai dibuat dan dikirimkan ke email Anda. Silakan periksa inbox email Anda untuk mengunduh dan memeriksa berkas draft tersebut.'}
                   </p>
                 </div>
               </div>
